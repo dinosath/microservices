@@ -1,4 +1,5 @@
-# code-with-quarkus Project
+
+# apicurio-registry-microservice-generator Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -43,14 +44,20 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 ./mvnw package -Pnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
+You can then execute your native executable with: `./target/apicurio-registry-microservice-generator-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
 
+## Related Guides
+
+- SmallRye Reactive Messaging ([guide](https://quarkus.io/guides/reactive-messaging)): Produce and consume messages and implement event driven and data streaming applications
+- SmallRye Reactive Messaging - Kafka Connector ([guide](https://quarkus.io/guides/kafka-reactive-getting-started)): Connect to Kafka with Reactive Messaging
+
 ## Provided Code
 
-### RESTEasy Reactive
+### Reactive Messaging codestart
 
-Easily start your Reactive RESTful Web Services
+Use SmallRye Reactive Messaging
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+[Related Apache Kafka guide section...](https://quarkus.io/guides/kafka-reactive-getting-started)
+
