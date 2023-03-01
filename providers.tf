@@ -12,6 +12,11 @@ terraform {
       source  = "hashicorp/helm"
       version = ">= 2.2.0"
     }
+    kustomization = {
+      source = "kbst/kustomization"
+      version = "0.9.2"
+    }
+
 
   }
 }
@@ -25,4 +30,8 @@ provider "helm" {
   kubernetes {
     config_path = "~/.kube/config"
   }
+}
+
+provider "kustomization" {
+    kubeconfig_path = "~/.kube/config"
 }

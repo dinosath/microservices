@@ -38,6 +38,20 @@ resource "helm_release" "cert-manager" {
   }
 }
 
+
+data "kustomization" "redpanda-crd" {
+  provider = kustomization
+  path = "github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref=v23.1.1"
+}
+
+resource "kustomization_resource" "redpanda-crd" {
+  provider = kustomization
+
+  for_each = data.kustomization.redpanda-crd.ids
+  manifest = data.kustomization.redpanda-crd.manifests[each.value]
+  depends_on = [module.olm,data.kustomization.redpanda-crd]
+}
+
 resource "helm_release" "redpanda-operator" {
   name             = "redpanda-operator"
   repository       = "https://charts.vectorized.io/"
@@ -47,7 +61,7 @@ resource "helm_release" "redpanda-operator" {
   force_update     = true
   depends_on = [
     helm_release.cert-manager,
-    module.olm
+    resource.kustomization_resource.redpanda-crd
   ]
 }
 
@@ -77,4 +91,22 @@ data "local_file" "postgres" {
 resource "kubectl_manifest" "postgresql" {
   yaml_body  = data.local_file.postgres.content
   depends_on = [resource.kubectl_manifest.postgresql-operator]
+}
+
+data "http" "redpanda-cluster" {
+  url = "https://raw.githubusercontent.com/redpanda-data/redpanda/dev/src/go/k8s/config/samples/one_node_cluster.yaml"
+}
+
+resource "kubectl_manifest" "redpanda-cluster" {
+  yaml_body  = data.http.redpanda-cluster.response_body
+  depends_on = [helm_release.redpanda-operator]
+}
+
+data "http" "apicurio-operator" {
+  url = "https://operatorhub.io/install/apicurio-registry.yaml"
+}
+
+resource "kubectl_manifest" "apicurio-operator" {
+  yaml_body  = data.http.apicurio-operator.response_body
+  depends_on = [module.olm]
 }
