@@ -1,10 +1,8 @@
 package com.crazyfly;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import com.crazyfly.resources.MyReactiveMessagingApplication;
 import io.quarkus.test.junit.QuarkusTest;
 
-import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;

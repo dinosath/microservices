@@ -1,0 +1,120 @@
+[{
+  "apiVersion" : "apps/v1",
+  "kind" : "Deployment",
+  "metadata" : {
+    "annotations" : {
+      "prometheus.io/port" : "8082",
+      "prometheus.io/scheme" : "http",
+      "app.quarkus.io/commit-id" : "5cbefbbae66f57514da27db7b52566321ca95efc",
+      "app.quarkus.io/build-timestamp" : "2022-11-25 - 19:57:58 +0000",
+      "prometheus.io/scrape" : "true",
+      "prometheus.io/path" : "/q/metrics"
+    },
+    "labels" : {
+      "app.kubernetes.io/name" : "microservice-b",
+      "app.kubernetes.io/version" : "1.0.0-SNAPSHOT"
+    },
+    "name" : "microservice-b"
+  },
+  "spec" : {
+    "replicas" : 1,
+    "selector" : {
+      "matchLabels" : {
+        "app.kubernetes.io/name" : "microservice-b",
+        "app.kubernetes.io/version" : "1.0.0-SNAPSHOT"
+      }
+    },
+    "template" : {
+      "metadata" : {
+        "annotations" : {
+          "prometheus.io/port" : "8082",
+          "prometheus.io/scheme" : "http",
+          "app.quarkus.io/commit-id" : "5cbefbbae66f57514da27db7b52566321ca95efc",
+          "app.quarkus.io/build-timestamp" : "2022-11-25 - 19:57:58 +0000",
+          "prometheus.io/scrape" : "true",
+          "prometheus.io/path" : "/q/metrics"
+        },
+        "labels" : {
+          "app.kubernetes.io/name" : "microservice-b",
+          "app.kubernetes.io/version" : "1.0.0-SNAPSHOT"
+        }
+      },
+      "spec" : {
+        "containers" : [ {
+          "env" : [ {
+            "name" : "KUBERNETES_NAMESPACE",
+            "valueFrom" : {
+              "fieldRef" : {
+                "fieldPath" : "metadata.namespace"
+              }
+            }
+          } ],
+          "image" : "quay.io/quarkus-super-heroes/microservice-b:1.0.0-SNAPSHOT",
+          "imagePullPolicy" : "IfNotPresent",
+          "livenessProbe" : {
+            "failureThreshold" : 3,
+            "httpGet" : {
+              "path" : "/q/health/live",
+              "port" : 8082,
+              "scheme" : "HTTP"
+            },
+            "initialDelaySeconds" : 0,
+            "periodSeconds" : 30,
+            "successThreshold" : 1,
+            "timeoutSeconds" : 10
+          },
+          "name" : "microservice-b",
+          "ports" : [ {
+            "containerPort" : 8082,
+            "name" : "http",
+            "protocol" : "TCP"
+          } ],
+          "readinessProbe" : {
+            "failureThreshold" : 3,
+            "httpGet" : {
+              "path" : "/q/health/ready",
+              "port" : 8082,
+              "scheme" : "HTTP"
+            },
+            "initialDelaySeconds" : 0,
+            "periodSeconds" : 30,
+            "successThreshold" : 1,
+            "timeoutSeconds" : 10
+          }
+        } ]
+      }
+    }
+  }
+},{
+  "apiVersion" : "v1",
+  "kind" : "Service",
+  "metadata" : {
+    "annotations" : {
+      "prometheus.io/port" : "8082",
+      "prometheus.io/scheme" : "http",
+      "app.quarkus.io/commit-id" : "5cbefbbae66f57514da27db7b52566321ca95efc",
+      "app.quarkus.io/build-timestamp" : "2022-11-25 - 19:57:58 +0000",
+      "prometheus.io/scrape" : "true",
+      "prometheus.io/path" : "/q/metrics"
+    },
+    "labels" : {
+      "app.kubernetes.io/name" : "microservice-b",
+      "app.kubernetes.io/version" : "1.0.0-SNAPSHOT"
+    },
+    "name" : "microservice-b"
+  },
+  "spec" : {
+    "ports" : [ {
+      "name" : "http",
+      "nodePort" : 30640,
+      "port" : 80,
+      "protocol" : "TCP",
+      "targetPort" : 8082
+    } ],
+    "selector" : {
+      "app.kubernetes.io/name" : "microservice-b",
+      "app.kubernetes.io/version" : "1.0.0-SNAPSHOT"
+    },
+    "type" : "NodePort"
+  }
+}]
