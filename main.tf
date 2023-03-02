@@ -24,7 +24,7 @@ resource "helm_release" "nginx_ingress" {
 }
 
 resource "helm_release" "cert-manager" {
-  name             = "nginx-ingress-controller"
+  name             = "cert-manager"
   repository       = "https://charts.jetstack.io"
   chart            = "cert-manager"
   namespace        = "cert-manager"
@@ -65,15 +65,6 @@ resource "helm_release" "redpanda-operator" {
   ]
 }
 
-data "http" "keycloak-operator-manifest" {
-  url = "https://operatorhub.io/install/candidate/keycloak-operator.yaml"
-}
-
-resource "kubectl_manifest" "keycloak-operator-manifest-resource" {
-  yaml_body  = data.http.keycloak-operator-manifest.response_body
-  depends_on = [module.olm]
-}
-
 data "http" "postgresql-operator" {
   url = "https://operatorhub.io/install/postgresql.yaml"
 }
@@ -102,11 +93,47 @@ resource "kubectl_manifest" "redpanda-cluster" {
   depends_on = [helm_release.redpanda-operator]
 }
 
-data "http" "apicurio-operator" {
+data "http" "apicurio-registry-operator" {
   url = "https://operatorhub.io/install/apicurio-registry.yaml"
 }
 
-resource "kubectl_manifest" "apicurio-operator" {
-  yaml_body  = data.http.apicurio-operator.response_body
+resource "kubectl_manifest" "apicurio-registry-operator" {
+  yaml_body  = data.http.apicurio-registry-operator.response_body
   depends_on = [module.olm]
+}
+
+data "local_file" "apicurio-registry" {
+  filename = "k8s/apicurio-registry.yaml"
+}
+
+resource "kubectl_manifest" "apicurio-registry" {
+  yaml_body  = data.local_file.apicurio-registry.content
+  depends_on = [resource.kubectl_manifest.apicurio-registry-operator]
+}
+
+data "http" "keycloak-crd" {
+  url = "https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/21.0.1/kubernetes/keycloaks.k8s.keycloak.org-v1.yml"
+}
+
+resource "kubectl_manifest" "keycloak-crd" {
+  yaml_body  = data.http.keycloak-crd.response_body
+  depends_on = [module.olm]
+}
+
+data "http" "keycloak-realm-imports" {
+  url = "https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/21.0.1/kubernetes/keycloakrealmimports.k8s.keycloak.org-v1.yml"
+}
+
+resource "kubectl_manifest" "keycloak-realm-imports" {
+  yaml_body  = data.http.keycloak-realm-imports.response_body
+  depends_on = [data.http.keycloak-crd]
+}
+
+data "http" "keycloak-operator" {
+  url = "https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/21.0.1/kubernetes/kubernetes.yml"
+}
+
+resource "kubectl_manifest" "keycloak-operator" {
+  yaml_body  = data.http.keycloak-operator.response_body
+  depends_on = [data.http.keycloak-realm-imports]
 }

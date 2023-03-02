@@ -1,0 +1,8 @@
+apiVersion: registry.apicur.io/v1
+kind: ApicurioRegistry
+metadata:
+  name: apicurio-registry
+spec:
+  configuration:
+    kafkasql:
+      bootstrapServers: 'one-node-cluster:9092'

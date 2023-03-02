@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: crazyfly-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    ingress.kubernetes.io/add-base-url: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /registry
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: apicurio-registry-service
+                port:
+                  number: 8080
