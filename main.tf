@@ -83,12 +83,12 @@ resource "kubectl_manifest" "postgresql" {
   depends_on = [resource.kubectl_manifest.postgresql-operator]
 }
 
-data "http" "redpanda-cluster" {
-  url = "https://raw.githubusercontent.com/redpanda-data/redpanda/dev/src/go/k8s/config/samples/one_node_cluster.yaml"
+data "local_file" "redpanda" {
+  filename = "k8s/redpanda.yaml"
 }
 
-resource "kubectl_manifest" "redpanda-cluster" {
-  yaml_body  = data.http.redpanda-cluster.response_body
+resource "kubectl_manifest" "redpanda" {
+  yaml_body  = data.local_file.redpanda.response_body
   depends_on = [helm_release.redpanda-operator]
 }
 
