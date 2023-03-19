@@ -16,9 +16,8 @@ import java.util.concurrent.CompletionStage;
 
 
 @ApplicationScoped
-public class EventsHandler {
-
-    private static final Logger LOGGER = Logger.getLogger(EventsHandler.class);
+public class ApicurioEventsHandler {
+    private static final Logger LOGGER = Logger.getLogger(ApicurioEventsHandler.class);
     private static final RegistryClient registryClient;
 
     static {
@@ -46,13 +45,8 @@ public class EventsHandler {
         try {
             ArtifactId artifactId = objectMapper.readValue(message.getPayload(), ArtifactId.class);
             String openAPIUrl = String.format("%s/apis/registry/v2/groups/%s/artifacts/%s",registryUrl,artifactId.getGroupId(),artifactId.getArtifactId());
+            LOGGER.debug("openAPIUrl:"+openAPIUrl);
 
-
-
-            return response.subscribeAsCompletionStage()
-                .thenAccept(s -> {
-                    LOGGER.debug("👍👍👍👍👍");
-                });
         } catch (JsonProcessingException e) {
             LOGGER.error(String.format("Message payload {%s} cannot be deserialized to class ArtifactCreated due to %s",message.getPayload(),e.getMessage()));
         }
