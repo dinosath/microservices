@@ -1,6 +1,6 @@
 package com.crazyfly;
 
-import com.crazyfly.resources.MyReactiveMessagingApplication;
+import com.crazyfly.resources.ApicurioEventsHandler;
 import io.quarkus.test.junit.QuarkusTest;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MyReactiveMessagingApplicationTest {
 
     @Inject
-    MyReactiveMessagingApplication application;
+    ApicurioEventsHandler apicurioEventsHandler;
 
     @Test
     void test() {

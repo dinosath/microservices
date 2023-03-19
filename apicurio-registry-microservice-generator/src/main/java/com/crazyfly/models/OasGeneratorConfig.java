@@ -2,25 +2,26 @@
 package com.crazyfly.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.common.MongoEntity;
 import io.swagger.v3.parser.core.models.AuthorizationValue;
 import org.openapitools.codegen.api.TemplateDefinition;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 
-@Entity
-@Table(name = "oasgen_config")
-public class OasGeneratorConfig {
+@MongoEntity(collection="oasgen_config")
+public class OasGeneratorConfig extends PanacheMongoEntity {
+
     @NotBlank
     private String name;
     private JsonNode spec;
     private Map<String, String> options;
     private String openAPIUrl;
+
     private AuthorizationValue authorizationValue;
 
     private List<TemplateDefinition> templateDefinitionList = new ArrayList<>();

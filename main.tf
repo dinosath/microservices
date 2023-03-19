@@ -28,7 +28,6 @@ resource "helm_release" "cert-manager" {
   repository       = "https://charts.jetstack.io"
   chart            = "cert-manager"
   namespace        = "cert-manager"
-  version          = "v1.4.4"
   create_namespace = true
   force_update     = true
 
@@ -41,15 +40,15 @@ resource "helm_release" "cert-manager" {
 
 data "kustomization" "redpanda-crd" {
   provider = kustomization
-  path = "github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref=v23.1.1"
+  path     = "github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref=v23.1.1"
 }
 
 resource "kustomization_resource" "redpanda-crd" {
   provider = kustomization
 
-  for_each = data.kustomization.redpanda-crd.ids
-  manifest = data.kustomization.redpanda-crd.manifests[each.value]
-  depends_on = [module.olm,data.kustomization.redpanda-crd]
+  for_each   = data.kustomization.redpanda-crd.ids
+  manifest   = data.kustomization.redpanda-crd.manifests[each.value]
+  depends_on = [module.olm, data.kustomization.redpanda-crd]
 }
 
 resource "helm_release" "redpanda-operator" {
@@ -137,3 +136,84 @@ resource "kubectl_manifest" "keycloak-operator" {
   yaml_body  = data.http.keycloak-operator.response_body
   depends_on = [data.http.keycloak-realm-imports]
 }
+
+resource "kubernetes_secret" "postgres-secret" {
+  metadata {
+    name = "postgres-secret"
+  }
+
+  data = {
+    username = "postgres"
+    password = "postgres"
+  }
+
+  type = "kubernetes.io/basic-auth"
+}
+
+
+
+resource "kubernetes_secret" "crazyfly-tls-secret" {
+  metadata {
+    name      = "crazyfly-tls-secret"
+  }
+
+  data = {
+    "tls.crt" = file("${path.module}/k8s/certs/certificate.pem")
+    "tls.key" = file("${path.module}/k8s/certs/key.pem")
+  }
+
+
+  type = "kubernetes.io/tls"
+}
+
+data "local_file" "kc-postgres" {
+  filename = "k8s/postgres.yaml"
+}
+
+resource "kubectl_manifest" "kc-postgres" {
+  yaml_body  = data.local_file.kc-postgres.content
+}
+
+data "local_file" "keycloak" {
+  filename = "k8s/keycloak.yaml"
+}
+
+resource "kubectl_manifest" "keycloak" {
+  yaml_body  = data.local_file.keycloak.content
+  depends_on = [resource.kubectl_manifest.keycloak-operator,resource.kubectl_manifest.kc-postgres,resource.kubernetes_secret.crazyfly-tls-secret,resource.kubernetes_secret.postgres-secret]
+}
+
+
+resource "helm_release" "argo-events" {
+  name             = "argo-events"
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-events"
+  namespace        = "default"
+  create_namespace = true
+}
+
+# resource "helm_release" "kafka" {
+#   name             = "kafka"
+#   repository       = "https://packages.vectorized.io/public/console/helm/charts/"
+#   chart            = "console"
+#   namespace        = "default"
+#   create_namespace = true
+# }
+
+# resource "helm_release" "kafka-ui" {
+#   name             = "kafka-ui"
+#   repository       = "https://provectus.github.io/kafka-ui"
+#   chart            = "kafka-ui"
+#   namespace        = "default"
+#   create_namespace = true
+
+#   set {
+#     name  = "envs.config.KAFKA_CLUSTERS_0_NAME"
+#     value = "local"
+#   }
+
+#   set {
+#     name  = "envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS"
+#     value = "my-kafka:9092"
+#   }
+# }

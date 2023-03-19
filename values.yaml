@@ -1,0 +1,11 @@
+console:
+  config:
+    kafka:
+      brokers:
+        - redpanda:9092
+      clientId: redpanda-console
+      schemaRegistry:
+        enabled: true
+        urls: ["http://redpanda:8081"]
+        username: console
+        password: redacted

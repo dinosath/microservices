@@ -2,9 +2,6 @@ package com.crazyfly.resources;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.apicurio.registry.events.dto.ArtifactId;
-import io.apicurio.registry.rest.client.RegistryClient;
-import io.apicurio.registry.rest.client.RegistryClientFactory;
 import io.smallrye.reactive.messaging.ce.IncomingCloudEventMetadata;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -18,12 +15,6 @@ import java.util.concurrent.CompletionStage;
 @ApplicationScoped
 public class ApicurioEventsHandler {
     private static final Logger LOGGER = Logger.getLogger(ApicurioEventsHandler.class);
-    private static final RegistryClient registryClient;
-
-    static {
-        String registryUrl = System.getenv("REGISTRY_URL");
-        registryClient = RegistryClientFactory.create(registryUrl);
-    }
 
     @ConfigProperty(name = "apicurio.registry.url",defaultValue = "http://apicurio-registry:8080")
     String registryUrl;
@@ -42,14 +33,10 @@ public class ApicurioEventsHandler {
         LOGGER.debug("message.payload:"+message.getPayload());
         LOGGER.debug("message :"+cloudEventMetadata.getExtensions().toString()   );
         ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            ArtifactId artifactId = objectMapper.readValue(message.getPayload(), ArtifactId.class);
-            String openAPIUrl = String.format("%s/apis/registry/v2/groups/%s/artifacts/%s",registryUrl,artifactId.getGroupId(),artifactId.getArtifactId());
-            LOGGER.debug("openAPIUrl:"+openAPIUrl);
+//            ArtifactId artifactId = objectMapper.readValue(message.getPayload(), ArtifactId.class);
+//            String openAPIUrl = String.format("%s/apis/registry/v2/groups/%s/artifacts/%s",registryUrl,artifactId.getGroupId(),artifactId.getArtifactId());
+//            LOGGER.debug("openAPIUrl:"+openAPIUrl);
 
-        } catch (JsonProcessingException e) {
-            LOGGER.error(String.format("Message payload {%s} cannot be deserialized to class ArtifactCreated due to %s",message.getPayload(),e.getMessage()));
-        }
         return message.ack();
     }
 

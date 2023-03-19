@@ -1,8 +1,63 @@
-apiVersion: registry.apicur.io/v1
-kind: ApicurioRegistry
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: apicurio-registry
   name: apicurio-registry
 spec:
-  configuration:
-    kafkasql:
-      bootstrapServers: 'one-node-cluster:9092'
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: apicurio-registry
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/synapse: "true"
+        io.kompose.service: apicurio-registry
+    spec:
+      containers:
+        - env:
+            - name: AUTH_ENABLED
+              value: "false"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: my-kafka:9092
+            - name: KEYCLOAK_API_CLIENT_ID
+              value: registry-api
+            - name: REGISTRY_EVENTS_KAFKA_TOPIC
+              value: apicurio-registry-events
+          image: apicurio/apicurio-registry-mem:2.4.1.Final
+          name: apicurio-registry
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: apicurio-registry
+  name: apicurio-registry
+spec:
+  ports:
+    - name: "8090"
+      port: 8090
+      targetPort: 8080
+  selector:
+    io.kompose.service: apicurio-registry
+status:
+  loadBalancer: {}
