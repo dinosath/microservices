@@ -3,11 +3,12 @@ services:
 
   #apicurio-registry
   apicurio-registry:
+    container_name: apicurio-registry
     image: 'apicurio/apicurio-registry-sql:latest-release'
     ports:
       - '8090:8080'
     environment:
-      AUTH_ENABLED: false
+      AUTH_ENABLED: "false"
       KEYCLOAK_URL: http://localhost:8081
       KEYCLOAK_REALM: registry
       KEYCLOAK_API_CLIENT_ID: registry-api
@@ -22,6 +23,7 @@ services:
 
   redpanda:
     image: docker.redpanda.com/vectorized/redpanda:v22.2.2
+    container_name: redpanda
     command:
       - redpanda start
       - --overprovisioned
@@ -37,6 +39,7 @@ services:
       - 29092:29092
 
   console:
+    container_name: redpanda-console
     image: docker.redpanda.com/vectorized/console:latest
     entrypoint: /bin/sh
     command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
@@ -138,12 +141,55 @@ services:
 #      - COLLECTOR_OTLP_ENABLED=true
 
       # openapi-generator
-  openapi-generator:
-    image: openapitools/openapi-generator-online
-    ports:
-    - "8088:8080"
-
-
+  # openapi-generator:
+  #   image: openapitools/openapi-generator-online
+  #   ports:
+  #   - "8088:8080"
+  #
+  # mongo:
+  #     image: mongo:latest
+  #     ports:
+  #         - 27017:27017
+  #     volumes:
+  #         - mongo_data:/data/db
+  #
+  # eventstore:
+  #     image: eventstore/eventstore
+  #     environment:
+  #         - EVENTSTORE_CLUSTER_SIZE=1
+  #         - EVENTSTORE_RUN_PROJECTIONS=All
+  #         - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+  #         - EVENTSTORE_EXT_TCP_PORT=1113
+  #         - EVENTSTORE_HTTP_PORT=2113
+  #         - EVENTSTORE_INSECURE=true
+  #         - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
+  #         - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+  #     ports:
+  #         - 6113:1113
+  #         - 7113:2113
+  #     volumes:
+  #         - eventstore_data:/var/lib/eventstore
+  #
+  # synapse:
+  #     image: ghcr.io/serverlessworkflow/synapse:latest
+  #     environment:
+  #         - ASPNETCORE_ENVIRONMENT=Development
+  #         - SYNAPSE_API_HOSTNAME=synapse
+  #         - SYNAPSE_PERSISTENCE_WRITEMODEL_DEFAULT_REPOSITORY=EventStore
+  #         - SYNAPSE_PERSISTENCE_READMODEL_DEFAULT_REPOSITORY=MongoDB
+  #         - CONNECTIONSTRINGS__EVENTSTORE=esdb://eventstore:2113?tls=false
+  #         - CONNECTIONSTRINGS__MONGODB=mongodb://mongo:27017
+  #     ports:
+  #         - 42286:42286
+  #         - 41387:41387
+  #     extra_hosts:
+  #         - host.docker.internal:host-gateway
+  #     volumes:
+  #         - /var/run/docker.sock:/var/run/docker.sock
+  #         - ./plugins:/app/plugins
+  #     depends_on:
+  #         - mongo
+  #         - eventstore
   # Zipkin
 #  zipkin:
 #    image: openzipkin/zipkin:latest
@@ -175,3 +221,15 @@ services:
 #      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
 #    ports:
 #      - "9090:9090"
+
+
+
+volumes:
+    mongo_data:
+        driver: local
+    eventstore_data:
+        driver: local
+
+networks:
+    default:
+        name: synapse

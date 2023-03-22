@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: crazyfly-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    ingress.kubernetes.io/add-base-url: "true"
+spec:
+  tls:
+    - hosts:
+        - dev.crazyfly.com
+      secretName: crazyfly-tls-secret
+  rules:
+    - host: dev.crazyfly.com
+      http:
+        paths:
+          - path: /admin2
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: keycloak-service
+                port:
+                  number: 8443
+          - path: /registry
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: apicurio-registry-service
+                port:
+                  number: 8080
