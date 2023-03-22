@@ -1,6 +1,5 @@
 version: "3.8"
 services:
-
   #apicurio-registry
   apicurio-registry:
     container_name: apicurio-registry
@@ -37,6 +36,8 @@ services:
       - 9092:9092
       - 9644:9644
       - 29092:29092
+#    volumes:
+#      - redpanda:/var/lib/redpanda/data
 
   console:
     container_name: redpanda-console
@@ -222,14 +223,9 @@ services:
 #    ports:
 #      - "9090:9090"
 
-
-
 volumes:
     mongo_data:
         driver: local
     eventstore_data:
         driver: local
-
-networks:
-    default:
-        name: synapse
+    redpanda: null
