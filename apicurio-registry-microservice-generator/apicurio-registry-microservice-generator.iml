@@ -197,6 +197,29 @@
     <orderEntry type="library" name="Maven: org.jboss:jboss-transaction-spi:7.6.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.resource:jboss-connector-api_1.7_spec:1.0.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.narayana.jts:narayana-jts-integration:5.13.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-resteasy-reactive:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-resteasy-reactive-common:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus.resteasy.reactive:resteasy-reactive-common:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus.resteasy.reactive:resteasy-reactive-common-types:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus.resteasy.reactive:resteasy-reactive-vertx:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-vertx-http:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-security-runtime-spi:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-credentials:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus.security:quarkus-security:1.1.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-web:2.30.1" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-web-common:2.30.1" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-auth-common:2.30.1" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-bridge-common:2.30.1" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-uri-template:2.30.1" level="project" />
+    <orderEntry type="library" name="Maven: io.vertx:vertx-uri-template:4.3.7" level="project" />
+    <orderEntry type="library" name="Maven: io.github.crac:org-crac:0.1.3" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-jsonp:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.glassfish:jakarta.json:1.1.6" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-kubernetes:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-kubernetes-client-internal:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-container-image:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-container-image-jib:2.16.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-minikube:2.16.4.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-arc:2.16.4.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus.arc:arc:2.16.4.Final" level="project" />
     <orderEntry type="library" name="Maven: jakarta.transaction:jakarta.transaction-api:1.3.3" level="project" />
@@ -321,17 +344,6 @@
     <orderEntry type="library" name="Maven: io.smallrye:smallrye-open-api-core:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.microprofile.openapi:microprofile-openapi-api:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-vertx-http:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-security-runtime-spi:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-credentials:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus.security:quarkus-security:1.1.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-web:2.30.1" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-web-common:2.30.1" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-auth-common:2.30.1" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-bridge-common:2.30.1" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.reactive:smallrye-mutiny-vertx-uri-template:2.30.1" level="project" />
-    <orderEntry type="library" name="Maven: io.vertx:vertx-uri-template:4.3.7" level="project" />
-    <orderEntry type="library" name="Maven: io.github.crac:org-crac:0.1.3" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-swagger-ui:2.16.4.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-hibernate-validator:2.16.4.Final" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.2.5.Final" level="project" />
@@ -340,13 +352,6 @@
     <orderEntry type="library" name="Maven: org.glassfish:jakarta.el:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config-validator:2.13.3" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:2.0.1.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-resteasy-reactive:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-resteasy-reactive-common:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus.resteasy.reactive:resteasy-reactive-common:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus.resteasy.reactive:resteasy-reactive-common-types:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus.resteasy.reactive:resteasy-reactive-vertx:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-jsonp:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.glassfish:jakarta.json:1.1.6" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-resteasy-reactive-jackson:2.16.4.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-smallrye-health:2.16.4.Final" level="project" />
     <orderEntry type="library" name="Maven: io.smallrye:smallrye-health:3.3.1" level="project" />
@@ -366,8 +371,6 @@
     <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-classloader:1.13.2" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.microprofile.config:microprofile-config-api:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mapstruct:mapstruct:1.5.3.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-container-image-jib:2.16.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-container-image:2.16.4.Final" level="project" />
     <orderEntry type="module-library" scope="PROVIDED">
       <library name="Quarkus (deployment)">
         <CLASSES>
@@ -440,37 +443,35 @@
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-openapi-spi/2.16.4.Final/quarkus-smallrye-openapi-spi-2.16.4.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/jakarta/json/jakarta.json-api/1.1.6/jakarta.json-api-1.1.6.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/smallrye/smallrye-health-ui/3.3.1/smallrye-health-ui-3.3.1.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.6.20/kotlin-stdlib-1.6.20.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.31/kotlin-stdlib-common-1.5.31.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-config-yaml-deployment/2.16.4.Final/quarkus-config-yaml-deployment-2.16.4.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkiverse/helm/quarkus-helm-deployment/0.2.0/quarkus-helm-deployment-0.2.0.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/helm-annotations/3.1.1/helm-annotations-3.1.1-noapt.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/dekorate-core/3.1.1/dekorate-core-3.1.1.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-client/6.2.0/kubernetes-client-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-client-api/6.2.0/kubernetes-client-api-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-core/6.2.0/kubernetes-model-core-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-common/6.2.0/kubernetes-model-common-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-gatewayapi/6.2.0/kubernetes-model-gatewayapi-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-rbac/6.2.0/kubernetes-model-rbac-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-admissionregistration/6.2.0/kubernetes-model-admissionregistration-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-apps/6.2.0/kubernetes-model-apps-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-autoscaling/6.2.0/kubernetes-model-autoscaling-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-apiextensions/6.2.0/kubernetes-model-apiextensions-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-batch/6.2.0/kubernetes-model-batch-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-certificates/6.2.0/kubernetes-model-certificates-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-coordination/6.2.0/kubernetes-model-coordination-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-discovery/6.2.0/kubernetes-model-discovery-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-events/6.2.0/kubernetes-model-events-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-extensions/6.2.0/kubernetes-model-extensions-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-flowcontrol/6.2.0/kubernetes-model-flowcontrol-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-networking/6.2.0/kubernetes-model-networking-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-metrics/6.2.0/kubernetes-model-metrics-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-policy/6.2.0/kubernetes-model-policy-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-scheduling/6.2.0/kubernetes-model-scheduling-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-storageclass/6.2.0/kubernetes-model-storageclass-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-node/6.2.0/kubernetes-model-node-6.2.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-httpclient-okhttp/6.2.0/kubernetes-httpclient-okhttp-6.2.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-client/6.3.1/kubernetes-client-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-client-api/6.3.1/kubernetes-client-api-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-core/6.3.1/kubernetes-model-core-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-common/6.3.1/kubernetes-model-common-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-gatewayapi/6.3.1/kubernetes-model-gatewayapi-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-rbac/6.3.1/kubernetes-model-rbac-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-admissionregistration/6.3.1/kubernetes-model-admissionregistration-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-apps/6.3.1/kubernetes-model-apps-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-autoscaling/6.3.1/kubernetes-model-autoscaling-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-apiextensions/6.3.1/kubernetes-model-apiextensions-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-batch/6.3.1/kubernetes-model-batch-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-certificates/6.3.1/kubernetes-model-certificates-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-coordination/6.3.1/kubernetes-model-coordination-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-discovery/6.3.1/kubernetes-model-discovery-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-events/6.3.1/kubernetes-model-events-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-extensions/6.3.1/kubernetes-model-extensions-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-flowcontrol/6.3.1/kubernetes-model-flowcontrol-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-networking/6.3.1/kubernetes-model-networking-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-metrics/6.3.1/kubernetes-model-metrics-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-policy/6.3.1/kubernetes-model-policy-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-scheduling/6.3.1/kubernetes-model-scheduling-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-storageclass/6.3.1/kubernetes-model-storageclass-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-node/6.3.1/kubernetes-model-node-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-httpclient-okhttp/6.3.1/kubernetes-httpclient-okhttp-6.3.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp3/logging-interceptor/3.12.12/logging-interceptor-3.12.12.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/zjsonpatch/0.3.0/zjsonpatch-0.3.0.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/dataformat/jackson-dataformat-properties/2.12.3/jackson-dataformat-properties-2.12.3.jar!/" />
@@ -487,6 +488,38 @@
           <root url="jar://$MAVEN_REPOSITORY$/io/smallrye/smallrye-open-api-vertx/3.1.1/smallrye-open-api-vertx-3.1.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kafka-client-deployment/2.16.4.Final/quarkus-kafka-client-deployment-2.16.4.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/strimzi/strimzi-test-container/0.100.0/strimzi-test-container-0.100.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kubernetes-deployment/2.16.4.Final/quarkus-kubernetes-deployment-2.16.4.Final.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kubernetes-client-internal-deployment/2.16.4.Final/quarkus-kubernetes-client-internal-deployment-2.16.4.Final.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kubernetes-client-spi/2.16.4.Final/quarkus-kubernetes-client-spi-2.16.4.Final.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/com/dajudge/kindcontainer/kindcontainer/1.3.0/kindcontainer-1.3.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcpkix-jdk15on/1.70/bcpkix-jdk15on-1.70.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcprov-jdk15on/1.70/bcprov-jdk15on-1.70.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcutil-jdk15on/1.70/bcutil-jdk15on-1.70.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/kubernetes-annotations/3.2.0/kubernetes-annotations-3.2.0-noapt.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/option-annotations/3.2.0/option-annotations-3.2.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/docker-annotations/3.2.0/docker-annotations-3.2.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/openshift-annotations/3.2.0/openshift-annotations-3.2.0-noapt.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/s2i-annotations/3.2.0/s2i-annotations-3.2.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-client/6.3.1/openshift-client-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-client-api/6.3.1/openshift-client-api-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model/6.3.1/openshift-model-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-config/6.3.1/openshift-model-config-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-clusterautoscaling/6.3.1/openshift-model-clusterautoscaling-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-operator/6.3.1/openshift-model-operator-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-operatorhub/6.3.1/openshift-model-operatorhub-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-machine/6.3.1/openshift-model-machine-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-whereabouts/6.3.1/openshift-model-whereabouts-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-monitoring/6.3.1/openshift-model-monitoring-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-storageversionmigrator/6.3.1/openshift-model-storageversionmigrator-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-tuned/6.3.1/openshift-model-tuned-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-console/6.3.1/openshift-model-console-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-machineconfig/6.3.1/openshift-model-machineconfig-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-miscellaneous/6.3.1/openshift-model-miscellaneous-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-hive/6.3.1/openshift-model-hive-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-installer/6.3.1/openshift-model-installer-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/knative-annotations/3.2.0/knative-annotations-3.2.0-noapt.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/knative-client/6.3.1/knative-client-6.3.1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/knative-model/6.3.1/knative-model-6.3.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-rest-client-reactive-jackson-deployment/2.16.4.Final/quarkus-rest-client-reactive-jackson-deployment-2.16.4.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-rest-client-reactive-deployment/2.16.4.Final/quarkus-rest-client-reactive-deployment-2.16.4.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-stork-deployment/2.16.4.Final/quarkus-smallrye-stork-deployment-2.16.4.Final.jar!/" />
@@ -504,10 +537,8 @@
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/d3js/6.6.0/d3js-6.6.0.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/chartjs/3.7.1/chartjs-3.7.1.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/npm/mermaid/9.4.0/mermaid-9.4.0.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-minikube-deployment/2.16.4.Final/quarkus-minikube-deployment-2.16.4.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-opentelemetry-deployment/2.16.4.Final/quarkus-opentelemetry-deployment-2.16.4.Final.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/com/squareup/okio/okio-jvm/3.0.0/okio-jvm-3.0.0.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.31/kotlin-stdlib-jdk8-1.5.31.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.31/kotlin-stdlib-jdk7-1.5.31.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-datasource-deployment-spi/2.16.4.Final/quarkus-datasource-deployment-spi-2.16.4.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-datasource-common/2.16.4.Final/quarkus-datasource-common-2.16.4.Final.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-agroal-spi/2.16.4.Final/quarkus-agroal-spi-2.16.4.Final.jar!/" />
@@ -521,126 +552,154 @@
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-jsonb-spi/2.16.4.Final/quarkus-jsonb-spi-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-container-image-jib-deployment/2.16.4.Final/quarkus-container-image-jib-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-jaxrs-client-reactive-deployment/2.16.4.Final/quarkus-jaxrs-client-reactive-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-node/6.2.0/kubernetes-model-node-6.2.0-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.31/kotlin-stdlib-common-1.5.31-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-jaxrs-spi-deployment/2.16.4.Final/quarkus-jaxrs-spi-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kubernetes-service-binding-spi/2.16.4.Final/quarkus-kubernetes-service-binding-spi-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/option-annotations/3.2.0/option-annotations-3.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-resteasy-server-common-spi/2.16.4.Final/quarkus-resteasy-server-common-spi-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-certificates/6.2.0/kubernetes-model-certificates-6.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/google/auto/value/auto-value-annotations/1.9/auto-value-annotations-1.9-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kubernetes-spi/2.14.0.Final/quarkus-kubernetes-spi-2.14.0.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-context-propagation-spi/2.16.4.Final/quarkus-smallrye-context-propagation-spi-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-batch/6.3.1/kubernetes-model-batch-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-extensions/6.3.1/kubernetes-model-extensions-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/knative-client/6.3.1/knative-client-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-container-image-deployment/2.16.4.Final/quarkus-container-image-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/smallrye/smallrye-open-api-jaxrs/3.1.1/smallrye-open-api-jaxrs-3.1.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-discovery/6.3.1/kubernetes-model-discovery-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/strimzi/strimzi-test-container/0.100.0/strimzi-test-container-0.100.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-coordination/6.3.1/kubernetes-model-coordination-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp3/logging-interceptor/3.12.12/logging-interceptor-3.12.12-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/google/auth/google-auth-library-credentials/1.10.0/google-auth-library-credentials-1.10.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-container-image-util/2.16.4.Final/quarkus-container-image-util-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/testcontainers/testcontainers/1.17.6/testcontainers-1.17.6-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-minikube-deployment/2.16.4.Final/quarkus-minikube-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-arc-deployment/2.16.4.Final/quarkus-arc-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/github/docker-java/docker-java-transport-zerodep/3.2.13/docker-java-transport-zerodep-3.2.13-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-autoscaling/6.3.1/kubernetes-model-autoscaling-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/npm/mermaid/9.4.0/mermaid-9.4.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-rest-client-reactive-deployment/2.16.4.Final/quarkus-rest-client-reactive-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-flowcontrol/6.3.1/kubernetes-model-flowcontrol-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/zjsonpatch/0.3.0/zjsonpatch-0.3.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-datasource-common/2.16.4.Final/quarkus-datasource-common-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/resteasy/reactive/resteasy-reactive-common-processor/2.16.4.Final/resteasy-reactive-common-processor-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-stork-deployment/2.16.4.Final/quarkus-smallrye-stork-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-machineconfig/6.3.1/openshift-model-machineconfig-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/smallrye/smallrye-open-api-ui/3.1.1/smallrye-open-api-ui-3.1.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/annotations/17.0.0/annotations-17.0.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/com/dajudge/kindcontainer/kindcontainer/1.3.0/kindcontainer-1.3.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-agroal-spi/2.16.4.Final/quarkus-agroal-spi-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/s2i-annotations/3.2.0/s2i-annotations-3.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/qute/qute-core/2.16.4.Final/qute-core-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-netty-deployment/2.16.4.Final/quarkus-netty-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-admissionregistration/6.3.1/kubernetes-model-admissionregistration-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kubernetes-client-spi/2.16.4.Final/quarkus-kubernetes-client-spi-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-hibernate-validator-spi/2.16.4.Final/quarkus-hibernate-validator-spi-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-events/6.2.0/kubernetes-model-events-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcutil-jdk15on/1.70/bcutil-jdk15on-1.70-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-config/6.3.1/openshift-model-config-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-whereabouts/6.3.1/openshift-model-whereabouts-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-rbac/6.3.1/kubernetes-model-rbac-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/dataformat/jackson-dataformat-properties/2.12.3/jackson-dataformat-properties-2.12.3-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/bootstrap/4.6.2/bootstrap-4.6.2-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-health-spi/2.16.4.Final/quarkus-smallrye-health-spi-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkiverse/helm/quarkus-helm-deployment/0.2.0/quarkus-helm-deployment-0.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-node/6.3.1/kubernetes-model-node-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-policy/6.3.1/kubernetes-model-policy-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-resteasy-reactive-jackson-deployment/2.16.4.Final/quarkus-resteasy-reactive-jackson-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-mutiny-reactive-streams-operators-deployment/2.16.4.Final/quarkus-mutiny-reactive-streams-operators-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kubernetes-deployment/2.16.4.Final/quarkus-kubernetes-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/github/yaml-path/yaml-path/0.0.4/yaml-path-0.0.4-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/dekorate-core/3.1.1/dekorate-core-3.1.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-jackson-deployment/2.16.4.Final/quarkus-jackson-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.31/kotlin-stdlib-jdk7-1.5.31-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-extensions/6.2.0/kubernetes-model-extensions-6.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-container-image-spi/2.16.4.Final/quarkus-container-image-spi-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/google/http-client/google-http-client-gson/1.42.2/google-http-client-gson-1.42.2-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-storageversionmigrator/6.3.1/openshift-model-storageversionmigrator-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-reactive-messaging-kafka-deployment/2.16.4.Final/quarkus-smallrye-reactive-messaging-kafka-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-security-spi/2.16.4.Final/quarkus-security-spi-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/resteasy/reactive/resteasy-reactive-processor/2.16.4.Final/resteasy-reactive-processor-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/npm/bootstrap-icons/1.9.1/bootstrap-icons-1.9.1-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-networking/6.2.0/kubernetes-model-networking-6.2.0-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-coordination/6.2.0/kubernetes-model-coordination-6.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-devservices-deployment/2.16.4.Final/quarkus-devservices-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-autoscaling/6.2.0/kubernetes-model-autoscaling-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-metrics/6.3.1/kubernetes-model-metrics-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/d3js/6.6.0/d3js-6.6.0-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/com/squareup/okio/okio-jvm/3.0.0/okio-jvm-3.0.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-apps/6.3.1/kubernetes-model-apps-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-resteasy-reactive-server-spi-deployment/2.16.4.Final/quarkus-resteasy-reactive-server-spi-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-resteasy-common-spi/2.16.4.Final/quarkus-resteasy-common-spi-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-flowcontrol/6.2.0/kubernetes-model-flowcontrol-6.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-openapi-deployment/2.16.4.Final/quarkus-smallrye-openapi-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.6.20/kotlin-stdlib-1.6.20-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/google/auth/google-auth-library-oauth2-http/1.10.0/google-auth-library-oauth2-http-1.10.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-devservices-common/2.16.4.Final/quarkus-devservices-common-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/bootstrap-multiselect/0.9.15/bootstrap-multiselect-0.9.15-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.31/kotlin-stdlib-jdk8-1.5.31-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/jakarta/json/jakarta.json-api/1.1.6/jakarta.json-api-1.1.6-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model/6.3.1/openshift-model-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-vertx-deployment/2.16.4.Final/quarkus-vertx-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/helm-annotations/3.1.1/helm-annotations-3.1.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-swagger-ui-deployment/2.16.4.Final/quarkus-swagger-ui-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-hibernate-validator-deployment/2.16.4.Final/quarkus-hibernate-validator-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-admissionregistration/6.2.0/kubernetes-model-admissionregistration-6.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-context-propagation-deployment/2.16.4.Final/quarkus-smallrye-context-propagation-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-apiextensions/6.2.0/kubernetes-model-apiextensions-6.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-mongodb-panache-deployment/2.16.4.Final/quarkus-mongodb-panache-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-gatewayapi/6.3.1/kubernetes-model-gatewayapi-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-openapi-common-deployment/2.16.4.Final/quarkus-smallrye-openapi-common-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-config-yaml-deployment/2.16.4.Final/quarkus-config-yaml-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-common/6.2.0/kubernetes-model-common-6.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/resteasy/reactive/resteasy-reactive-client-processor/2.16.4.Final/resteasy-reactive-client-processor-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-httpclient-okhttp/6.2.0/kubernetes-httpclient-okhttp-6.2.0-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-rbac/6.2.0/kubernetes-model-rbac-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-events/6.3.1/kubernetes-model-events-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/github/docker-java/docker-java-transport/3.2.13/docker-java-transport-3.2.13-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-machine/6.3.1/openshift-model-machine-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-rest-client-reactive-jackson-deployment/2.16.4.Final/quarkus-rest-client-reactive-jackson-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-jacoco-deployment/2.16.4.Final/quarkus-jacoco-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-client/6.2.0/kubernetes-client-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/openshift-annotations/3.2.0/openshift-annotations-3.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/google/http-client/google-http-client-apache-v2/1.42.2/google-http-client-apache-v2-1.42.2-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-policy/6.2.0/kubernetes-model-policy-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcprov-jdk15on/1.70/bcprov-jdk15on-1.70-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-operator/6.3.1/openshift-model-operator-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-vertx-http-dev-console-spi/2.16.4.Final/quarkus-vertx-http-dev-console-spi-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-client-api/6.2.0/kubernetes-client-api-6.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/smallrye/smallrye-open-api-spring/3.1.1/smallrye-open-api-spring-3.1.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-scheduling/6.3.1/kubernetes-model-scheduling-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-networking/6.3.1/kubernetes-model-networking-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/arc/arc-processor/2.16.4.Final/arc-processor-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-core/6.2.0/kubernetes-model-core-6.2.0-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-metrics/6.2.0/kubernetes-model-metrics-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-client/6.3.1/openshift-client-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-monitoring/6.3.1/openshift-model-monitoring-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-console/6.3.1/openshift-model-console-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-clusterautoscaling/6.3.1/openshift-model-clusterautoscaling-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-resteasy-reactive-jackson-common-deployment/2.16.4.Final/quarkus-resteasy-reactive-jackson-common-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-jsonp-deployment/2.16.4.Final/quarkus-jsonp-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-apps/6.2.0/kubernetes-model-apps-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/knative-model/6.3.1/knative-model-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-narayana-jta-deployment/2.16.4.Final/quarkus-narayana-jta-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-tuned/6.3.1/openshift-model-tuned-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-junit4-mock/2.16.4.Final/quarkus-junit4-mock-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-gatewayapi/6.2.0/kubernetes-model-gatewayapi-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-common/6.3.1/kubernetes-model-common-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-mongodb-client-deployment/2.16.4.Final/quarkus-mongodb-client-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-apiextensions/6.3.1/kubernetes-model-apiextensions-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-certificates/6.3.1/kubernetes-model-certificates-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-httpclient-okhttp/6.3.1/kubernetes-httpclient-okhttp-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.22/commons-compress-1.22-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-resteasy-reactive-spi-deployment/2.16.4.Final/quarkus-resteasy-reactive-spi-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/smallrye/smallrye-health-ui/3.3.1/smallrye-health-ui-3.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-miscellaneous/6.3.1/openshift-model-miscellaneous-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-smallrye-health-deployment/2.16.4.Final/quarkus-smallrye-health-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-caffeine-deployment/2.16.4.Final/quarkus-caffeine-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kafka-client-deployment/2.16.4.Final/quarkus-kafka-client-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcpkix-jdk15on/1.70/bcpkix-jdk15on-1.70-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/google/http-client/google-http-client/1.42.2/google-http-client-1.42.2-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/smallrye/smallrye-open-api-vertx/3.1.1/smallrye-open-api-vertx-3.1.1-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-batch/6.2.0/kubernetes-model-batch-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-client-api/6.3.1/openshift-client-api-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-client/6.3.1/kubernetes-client-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-resteasy-reactive-deployment/2.16.4.Final/quarkus-resteasy-reactive-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-kubernetes-client-internal-deployment/2.16.4.Final/quarkus-kubernetes-client-internal-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/google/cloud/tools/jib-build-plan/0.4.0/jib-build-plan-0.4.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/opencensus/opencensus-contrib-http-util/0.31.1/opencensus-contrib-http-util-0.31.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/jakarta/ejb/jakarta.ejb-api/3.2.6/jakarta.ejb-api-3.2.6-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-client-api/6.3.1/kubernetes-client-api-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/testcontainers/mongodb/1.17.6/mongodb-1.17.6-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/knative-annotations/3.2.0/knative-annotations-3.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-storageclass/6.3.1/kubernetes-model-storageclass-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-grpc-common-deployment/2.16.4.Final/quarkus-grpc-common-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-resteasy-reactive-common-deployment/2.16.4.Final/quarkus-resteasy-reactive-common-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-storageclass/6.2.0/kubernetes-model-storageclass-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/docker-annotations/3.2.0/docker-annotations-3.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-mongodb-panache-common-deployment/2.16.4.Final/quarkus-mongodb-panache-common-deployment-2.16.4.Final-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-discovery/6.2.0/kubernetes-model-discovery-6.2.0-sources.jar!/" />
-          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-scheduling/6.2.0/kubernetes-model-scheduling-6.2.0-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-installer/6.3.1/openshift-model-installer-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/webjars/jquery/3.6.1/jquery-3.6.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-vertx-http-deployment/2.16.4.Final/quarkus-vertx-http-deployment-2.16.4.Final-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/kubernetes-model-core/6.3.1/kubernetes-model-core-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/dekorate/kubernetes-annotations/3.2.0/kubernetes-annotations-3.2.0-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/com/github/docker-java/docker-java-api/3.2.13/docker-java-api-3.2.13-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-operatorhub/6.3.1/openshift-model-operatorhub-6.3.1-sources.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/io/fabric8/openshift-model-hive/6.3.1/openshift-model-hive-6.3.1-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-panache-common-deployment/2.16.4.Final/quarkus-panache-common-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/io/quarkus/quarkus-rest-client-config-deployment/2.16.4.Final/quarkus-rest-client-config-deployment-2.16.4.Final-sources.jar!/" />
           <root url="jar://$MAVEN_REPOSITORY$/org/rnorth/duct-tape/duct-tape/1.0.8/duct-tape-1.0.8-sources.jar!/" />
@@ -654,7 +713,7 @@
     </orderEntry>
   </component>
   <component name="Quarkus Tools">
-    <option name="hash" value="439599217" />
+    <option name="hash" value="1899419974" />
     <option name="version" value="1" />
   </component>
 </module>

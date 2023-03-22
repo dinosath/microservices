@@ -1,12 +1,15 @@
 package com.crazyfly.resources;
 
 import com.crazyfly.models.OasGeneratorConfig;
+import io.smallrye.mutiny.Uni;
 import org.bson.types.ObjectId;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -14,9 +17,10 @@ import java.util.List;
 @ApplicationScoped
 @Path("/oas_gen/configs")
 public class OpenApiGeneratorConfigResource {
-
     private static final Logger logger = Logger.getLogger(OpenApiGeneratorConfigResource.class);
 
+    @Channel("oasgen-config-events")
+    Emitter<String> emitter;
 
     @GET
     public List<OasGeneratorConfig> getConfigs() {
@@ -24,10 +28,12 @@ public class OpenApiGeneratorConfigResource {
     }
 
     @POST
-    public OasGeneratorConfig getConfigs(@Valid OasGeneratorConfig oasGeneratorConfig) {
+    public Uni<OasGeneratorConfig> createConfig(@Valid OasGeneratorConfig oasGeneratorConfig) {
+        emitter.send("creating new oasgen");
         oasGeneratorConfig.persist();
         logger.debug("Created oasGeneratorConfig:"+oasGeneratorConfig.id);
-        return oasGeneratorConfig;
+        emitter.send(String.valueOf(oasGeneratorConfig.id));
+        return Uni.createFrom().item(oasGeneratorConfig);
     }
 
     @Path("/{id}")

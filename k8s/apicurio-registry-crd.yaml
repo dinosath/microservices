@@ -5,4 +5,4 @@ metadata:
 spec:
   configuration:
     kafkasql:
-      bootstrapServers: 'one-node-cluster:9092'
+      bootstrapServers: 'redpanda-0.redpanda.redpanda.svc.cluster.local:9092'
