@@ -29,12 +29,24 @@ spec:
             - name: AUTH_ENABLED
               value: "false"
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: redpanda-0.redpanda.redpanda.svc.cluster.local:9094
+              value: redpanda:29092
             - name: KEYCLOAK_API_CLIENT_ID
               value: registry-api
+            - name: KEYCLOAK_REALM
+              value: registry
+            - name: KEYCLOAK_UI_CLIENT_ID
+              value: apicurio-registry
+            - name: KEYCLOAK_URL
+              value: http://localhost:8081
+            - name: REGISTRY_DATASOURCE_PASSWORD
+              value: postgres123!
+            - name: REGISTRY_DATASOURCE_URL
+              value: jdbc:postgresql://postgres/apicurio-registry
+            - name: REGISTRY_DATASOURCE_USERNAME
+              value: postgres
             - name: REGISTRY_EVENTS_KAFKA_TOPIC
               value: apicurio-registry-events
-          image: apicurio/apicurio-registry-mem:2.4.1.Final
+          image: apicurio/apicurio-registry-sql:latest-release
           name: apicurio-registry
           ports:
             - containerPort: 8080

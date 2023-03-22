@@ -192,6 +192,26 @@ resource "helm_release" "argo-events" {
   create_namespace = true
 }
 
+
+resource "helm_release" "opentelemetry-operator" {
+  name             = "opentelemetry-operator"
+  repository       = "https://open-telemetry.github.io/opentelemetry-helm-charts"
+  chart            = "opentelemetry-operator"
+  namespace        = "operators"
+  create_namespace = true
+  depends_on = [module.olm]
+}
+
+data "local_file" "opentelemetry-collector" {
+  filename = "k8s/otel.yaml"
+}
+
+resource "kubectl_manifest" "opentelemetry-collector" {
+  yaml_body  = data.local_file.opentelemetry-collector.content
+  depends_on = [data.local_file.opentelemetry,resource.helm_release.opentelemetry-operator]
+}
+
+
 # resource "helm_release" "kafka" {
 #   name             = "kafka"
 #   repository       = "https://packages.vectorized.io/public/console/helm/charts/"

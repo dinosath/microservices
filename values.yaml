@@ -1,11 +1,11 @@
-console:
-  config:
-    kafka:
-      brokers:
-        - redpanda:9092
-      clientId: redpanda-console
-      schemaRegistry:
-        enabled: true
-        urls: ["http://redpanda:8081"]
-        username: console
-        password: redacted
+yamlApplicationConfig:
+  kafka:
+    clusters:
+      - name: yaml
+        bootstrapServers:  redpanda-0.redpanda.redpanda.svc.cluster.local:9092
+  auth:
+    type: disabled
+  management:
+    health:
+      ldap:
+        enabled: false
