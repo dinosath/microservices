@@ -88,7 +88,7 @@ data "local_file" "redpanda" {
 }
 
 resource "kubectl_manifest" "redpanda" {
-  yaml_body  = data.local_file.redpanda.response_body
+  yaml_body  = data.local_file.redpanda.content
   depends_on = [helm_release.redpanda-operator]
 }
 
@@ -208,7 +208,7 @@ data "local_file" "opentelemetry-collector" {
 
 resource "kubectl_manifest" "opentelemetry-collector" {
   yaml_body  = data.local_file.opentelemetry-collector.content
-  depends_on = [data.local_file.opentelemetry,resource.helm_release.opentelemetry-operator]
+  depends_on = [data.local_file.opentelemetry-collector,resource.helm_release.opentelemetry-operator]
 }
 
 
