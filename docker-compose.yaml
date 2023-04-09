@@ -19,6 +19,8 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: redpanda:29092
     depends_on:
       - postgres
+    networks:
+      - microservices
 
   redpanda:
     image: docker.redpanda.com/vectorized/redpanda:v22.2.2
@@ -36,6 +38,8 @@ services:
       - 9092:9092
       - 9644:9644
       - 29092:29092
+    networks:
+      - microservices
 #    volumes:
 #      - redpanda:/var/lib/redpanda/data
 
@@ -65,49 +69,27 @@ services:
       - 8085:8080
     depends_on:
       - redpanda
-
-
-#  connect:
-#    image: docker.cloudsmith.io/redpanda/connectors/connectors:624ff9e
-#    hostname: connect
-#    container_name: connect
-#    depends_on:
-#      - redpanda
-#    ports:
-#      - "8086:8083"
-#    environment:
-#      KAFKA_CONNECT_CONFIGURATION: |
-#        offset.storage.topic=docker-connect-offsets
-#        value.converter=org.apache.kafka.connect.json.JsonConverter
-#        config.storage.topic=docker-connect-configs
-#        key.converter=org.apache.kafka.connect.json.JsonConverter
-#        group.id=compose-connect-group
-#        status.storage.topic=docker-connect-status
-#        config.storage.replication.factor=1
-#        offset.storage.replication.factor=1
-#        status.storage.replication.factor=1
-#      KAFKA_CONNECT_METRICS_ENABLED: "false"
-#      KAFKA_CONNECT_BOOTSTRAP_SERVERS: redpanda:29092
-#      KAFKA_GC_LOG_ENABLED: "false"
-#      KAFKA_HEAP_OPTS: -Xms128M
-
+    networks:
+      - microservices
 
   #keycloak
-#  keycloak:
-#    image: quay.io/keycloak/keycloak
-#    command: start-dev
-#    environment:
-#        KC_HOSTNAME_STRICT: false
-#        KEYCLOAK_ADMIN: admin
-#        KEYCLOAK_ADMIN_PASSWORD: admin
-#        KC_DB_USERNAME: postgres
-#        KC_DB_PASSWORD: postgres123!
-#        KEYCLOAK_DATASOURCE_URL: jdbc:postgresql://postgres/keycloak
-#        TZ: UTC
-#    ports:
-#        - 8081:8080
-#    depends_on:
-#        - postgres
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    command: start-dev
+    environment:
+        KC_HOSTNAME_STRICT: false
+        KEYCLOAK_ADMIN: admin
+        KEYCLOAK_ADMIN_PASSWORD: admin
+        KC_DB_USERNAME: postgres
+        KC_DB_PASSWORD: postgres123!
+        KEYCLOAK_DATASOURCE_URL: jdbc:postgresql://postgres/keycloak
+        TZ: UTC
+    ports:
+        - 8081:8080
+    depends_on:
+        - postgres
+    networks:
+        - microservices
 
   #postgres
   postgres:
@@ -119,27 +101,21 @@ services:
       - '5432:5432'
     volumes:
       - /data/postgres:/var/lib/postgresql/data
+    networks:
+      - microservices
 
   #pgadmin
-#  pgadmin:
-#    image: dpage/pgadmin4
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@pgadmin.org}
-#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-#    ports:
-#      - "${PGADMIN_PORT:-8089}:80"
-#    depends_on:
-#      - postgres
-
-  # Jaeger
-#  jaeger:
-#    image: jaegertracing/all-in-one:latest
-#    ports:
-#      - "16686:16686"
-#      - "14268"
-#      - "14250"
-#    environment:
-#      - COLLECTOR_OTLP_ENABLED=true
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+      - "${PGADMIN_PORT:-8089}:80"
+    networks:
+      - microservices
+    depends_on:
+      - postgres
 
       # openapi-generator
   # openapi-generator:
@@ -153,77 +129,136 @@ services:
   #         - 27017:27017
   #     volumes:
   #         - mongo_data:/data/db
-  #
-  # eventstore:
-  #     image: eventstore/eventstore
-  #     environment:
-  #         - EVENTSTORE_CLUSTER_SIZE=1
-  #         - EVENTSTORE_RUN_PROJECTIONS=All
-  #         - EVENTSTORE_START_STANDARD_PROJECTIONS=true
-  #         - EVENTSTORE_EXT_TCP_PORT=1113
-  #         - EVENTSTORE_HTTP_PORT=2113
-  #         - EVENTSTORE_INSECURE=true
-  #         - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
-  #         - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
-  #     ports:
-  #         - 6113:1113
-  #         - 7113:2113
-  #     volumes:
-  #         - eventstore_data:/var/lib/eventstore
-  #
-  # synapse:
-  #     image: ghcr.io/serverlessworkflow/synapse:latest
-  #     environment:
-  #         - ASPNETCORE_ENVIRONMENT=Development
-  #         - SYNAPSE_API_HOSTNAME=synapse
-  #         - SYNAPSE_PERSISTENCE_WRITEMODEL_DEFAULT_REPOSITORY=EventStore
-  #         - SYNAPSE_PERSISTENCE_READMODEL_DEFAULT_REPOSITORY=MongoDB
-  #         - CONNECTIONSTRINGS__EVENTSTORE=esdb://eventstore:2113?tls=false
-  #         - CONNECTIONSTRINGS__MONGODB=mongodb://mongo:27017
-  #     ports:
-  #         - 42286:42286
-  #         - 41387:41387
-  #     extra_hosts:
-  #         - host.docker.internal:host-gateway
-  #     volumes:
-  #         - /var/run/docker.sock:/var/run/docker.sock
-  #         - ./plugins:/app/plugins
-  #     depends_on:
-  #         - mongo
-  #         - eventstore
+
   # Zipkin
-#  zipkin:
-#    image: openzipkin/zipkin:latest
-#    ports:
-#      - "9411:9411"
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
 
   # Collector
-#  otel-collector:
-#    image: otel/opentelemetry-collector
-#    command:
-#      - "--config=/etc/otel-collector-config.yaml"
-#    volumes:
-#      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
-#    ports:
-#      - "1888:1888"   # pprof extension
-#      - "8888:8888"   # Prometheus metrics exposed by the collector
-#      - "8889:8889"   # Prometheus exporter metrics
-#      - "13133:13133" # health_check extension
-#      - "4317:4317"   # OTLP gRPC receiver
-#      - "55679:55679" # zpages extension
-#    depends_on:
-#      - jaeger
-#      - zipkin
+  otel-collector:
+    image: otel/opentelemetry-collector
+    command:
+      - "--config=/etc/otel-collector-config.yaml"
+    volumes:
+      - ./docker/compose/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "1888:1888"   # pprof extension
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+      - "55679:55679" # zpages extension
+    depends_on:
+      - jaeger
+      - zipkin
 
-#  prometheus:
-#    image: prom/prometheus:latest
-#    container_name: prometheus
-#    volumes:
-#      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
-#    ports:
-#      - "9090:9090"
+  # Jaeger
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14268"
+      - "14250"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
+  apisix-dashboard:
+    image: apache/apisix-dashboard:3.0.0-alpine
+    restart: always
+    volumes:
+    - ./docker/compose/dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+    ports:
+    - "9000:9000"
+    networks:
+      - microservices
+
+  apisix:
+    image: apache/apisix:3.2.0-debian
+    restart: always
+    volumes:
+      - ./docker/compose/apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+    depends_on:
+      - etcd
+    ##network_mode: host
+    ports:
+      - "9180:9180/tcp"
+      - "9080:9080/tcp"
+      - "9091:9091/tcp"
+      - "9443:9443/tcp"
+      - "9093:9092/tcp"
+    networks:
+      - microservices
+
+  etcd:
+    image: bitnami/etcd:3.4.15
+    restart: always
+    volumes:
+      - etcd_data:/bitnami/etcd
+    environment:
+      ETCD_ENABLE_V2: "true"
+      ALLOW_NONE_AUTHENTICATION: "yes"
+      ETCD_ADVERTISE_CLIENT_URLS: "http://etcd:2379"
+      ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
+    ports:
+      - "2379:2379/tcp"
+    networks:
+      - microservices
+
+  web1:
+    image: nginx:1.19.0-alpine
+    restart: always
+    volumes:
+      - ./docker/compose/upstream/web1.conf:/etc/nginx/nginx.conf
+    ports:
+      - "9081:80/tcp"
+    environment:
+      - NGINX_PORT=80
+    networks:
+      - microservices
+
+  web2:
+    image: nginx:1.19.0-alpine
+    restart: always
+    volumes:
+      - ./docker/compose/upstream/web2.conf:/etc/nginx/nginx.conf
+    ports:
+      - "9082:80/tcp"
+    environment:
+      - NGINX_PORT=80
+    networks:
+      - microservices
+
+  prometheus:
+    image: prom/prometheus:v2.43.0
+    restart: always
+    volumes:
+      - ./docker/compose/prometheus_conf/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - microservices
+
+  grafana:
+    image: grafana/grafana:main
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./docker/compose/grafana_conf/provisioning:/etc/grafana/provisioning"
+      - "./docker/compose/grafana_conf/dashboards:/var/lib/grafana/dashboards"
+      - "./docker/compose/grafana_conf/config/grafana.ini:/etc/grafana/grafana.ini"
+    networks:
+      - microservices
+
+networks:
+  microservices:
+    driver: bridge
 
 volumes:
+    etcd_data:
+      driver: local
     mongo_data:
         driver: local
     eventstore_data:
