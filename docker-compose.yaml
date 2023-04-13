@@ -23,10 +23,11 @@ services:
       - microservices
 
   redpanda:
-    image: docker.redpanda.com/vectorized/redpanda:v22.2.2
+    image: docker.redpanda.com/redpandadata/redpanda:v23.1.4
     container_name: redpanda
     command:
       - redpanda start
+      - --smp 1
       - --overprovisioned
       - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
       - --advertise-kafka-addr PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
@@ -45,7 +46,7 @@ services:
 
   console:
     container_name: redpanda-console
-    image: docker.redpanda.com/vectorized/console:latest
+    image: docker.redpanda.com/redpandadata/console:v2.2.3
     entrypoint: /bin/sh
     command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
     environment:
@@ -67,10 +68,10 @@ services:
               url: http://connect:8083
     ports:
       - 8085:8080
-    depends_on:
-      - redpanda
     networks:
       - microservices
+    depends_on:
+      - redpanda
 
   #keycloak
   keycloak:
