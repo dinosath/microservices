@@ -48,29 +48,3 @@ spec:
       #    enabled: true
       #    requireClientAuth: true
     developerMode: true
----
-apiVersion: redpanda.vectorized.io/v1alpha1
-kind: Console
-metadata:
-  name: console
-  namespace: redpanda
-spec:
-  server:
-    listenPort: 8080
-  schema:
-    enabled: true
-  clusterRef:
-    name: redpanda
-    namespace: redpanda
-  deployment:
-    image: vectorized/console
-  connect:
-    enabled: true
-    clusters:
-    - name: console-connector
-      url:  http://localhost:8083
-    #   tls:
-    #     enabled: true
-    #     secretKeyRef:
-    #       name: connector-tls
-    #       namespace: default

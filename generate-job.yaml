@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: generate-openapi
+spec:
+  template:
+    metadata:
+      name: sequential-job
+    spec:
+      initContainers:
+      - name: openapi-generator-cli
+        image: openapitools/openapi-generator-cli
+        args: ['generate', '-g', 'java', '-i', 'https://petstore3.swagger.io/api/v3/openapi.json','-o','/local']
+        volumeMounts:
+        - name: shared-data
+          mountPath: /local
+      - name: ls
+        image: busybox
+        command: ['ls','/local']
+        volumeMounts:
+        - name: shared-data
+          mountPath: /local
+      - name: mvn
+        image: maven:3-eclipse-temurin-8-alpine
+        workingDir: /local
+        command: ["mvn","package","-Pnative"]
+        volumeMounts:
+        - name: shared-data
+          mountPath: /local
+      containers:
+      - name: job-done
+        image: busybox
+        command: ['sh', '-c', 'echo "job-1 and job-2 completed"']
+      restartPolicy: Never
+      volumes:
+      - name: shared-data
+        emptyDir: {}

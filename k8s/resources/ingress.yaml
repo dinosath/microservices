@@ -6,15 +6,10 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     ingress.kubernetes.io/add-base-url: "true"
 spec:
-  tls:
-    - hosts:
-        - dev.crazyfly.com
-      secretName: crazyfly-tls-secret
   rules:
-    - host: dev.crazyfly.com
-      http:
+    - http:
         paths:
-          - path: /admin2
+          - path: /auth
             pathType: ImplementationSpecific
             backend:
               service:
@@ -26,5 +21,12 @@ spec:
             backend:
               service:
                 name: apicurio-registry-service
+                port:
+                  number: 8080
+          - path: /redpanda-console
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: console.redpanda.svc.cluster.local
                 port:
                   number: 8080

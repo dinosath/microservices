@@ -29,39 +29,11 @@ resource "helm_release" "cert-manager" {
   chart            = "cert-manager"
   namespace        = "cert-manager"
   create_namespace = true
-  force_update     = true
 
   set {
     name  = "installCRDs"
     value = "true"
   }
-}
-
-
-data "kustomization" "redpanda-crd" {
-  provider = kustomization
-  path     = "github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref=v23.1.1"
-}
-
-resource "kustomization_resource" "redpanda-crd" {
-  provider = kustomization
-
-  for_each   = data.kustomization.redpanda-crd.ids
-  manifest   = data.kustomization.redpanda-crd.manifests[each.value]
-  depends_on = [module.olm, data.kustomization.redpanda-crd]
-}
-
-resource "helm_release" "redpanda-operator" {
-  name             = "redpanda-operator"
-  repository       = "https://charts.vectorized.io/"
-  chart            = "redpanda-operator"
-  namespace        = "operators"
-  create_namespace = true
-  force_update     = true
-  depends_on = [
-    helm_release.cert-manager,
-    resource.kustomization_resource.redpanda-crd
-  ]
 }
 
 data "http" "postgresql-operator" {
@@ -74,22 +46,13 @@ resource "kubectl_manifest" "postgresql-operator" {
 }
 
 data "local_file" "postgres" {
-  filename = "k8s/postgres-cluster.crd.yaml"
+  filename = "resources/postgres-cluster.crd.yaml"
 }
 
 
 resource "kubectl_manifest" "postgresql" {
   yaml_body  = data.local_file.postgres.content
   depends_on = [resource.kubectl_manifest.postgresql-operator]
-}
-
-data "local_file" "redpanda" {
-  filename = "k8s/redpanda.yaml"
-}
-
-resource "kubectl_manifest" "redpanda" {
-  yaml_body  = data.local_file.redpanda.content
-  depends_on = [helm_release.redpanda-operator]
 }
 
 data "http" "apicurio-registry-operator" {
@@ -102,7 +65,7 @@ resource "kubectl_manifest" "apicurio-registry-operator" {
 }
 
 data "local_file" "apicurio-registry" {
-  filename = "k8s/apicurio-registry.yaml"
+  filename = "resources/apicurio-registry.yaml"
 }
 
 resource "kubectl_manifest" "apicurio-registry" {
@@ -158,8 +121,8 @@ resource "kubernetes_secret" "crazyfly-tls-secret" {
   }
 
   data = {
-    "tls.crt" = file("${path.module}/k8s/certs/certificate.pem")
-    "tls.key" = file("${path.module}/k8s/certs/key.pem")
+    "tls.crt" = file("${path.module}/certs/certificate.pem")
+    "tls.key" = file("${path.module}/certs/key.pem")
   }
 
 
@@ -167,7 +130,7 @@ resource "kubernetes_secret" "crazyfly-tls-secret" {
 }
 
 data "local_file" "kc-postgres" {
-  filename = "k8s/postgres.yaml"
+  filename = "resources/postgres.yaml"
 }
 
 resource "kubectl_manifest" "kc-postgres" {
@@ -175,7 +138,7 @@ resource "kubectl_manifest" "kc-postgres" {
 }
 
 data "local_file" "keycloak" {
-  filename = "k8s/keycloak.yaml"
+  filename = "resources/keycloak.yaml"
 }
 
 resource "kubectl_manifest" "keycloak" {
@@ -203,7 +166,7 @@ resource "helm_release" "opentelemetry-operator" {
 }
 
 data "local_file" "opentelemetry-collector" {
-  filename = "k8s/otel.yaml"
+  filename = "resources/otel.yaml"
 }
 
 resource "kubectl_manifest" "opentelemetry-collector" {
@@ -220,20 +183,137 @@ resource "kubectl_manifest" "opentelemetry-collector" {
 #   create_namespace = true
 # }
 
-# resource "helm_release" "kafka-ui" {
-#   name             = "kafka-ui"
-#   repository       = "https://provectus.github.io/kafka-ui"
-#   chart            = "kafka-ui"
-#   namespace        = "default"
+resource "helm_release" "kafka-ui" {
+  name             = "kafka-ui"
+  repository       = "https://provectus.github.io/kafka-ui"
+  chart            = "kafka-ui"
+  namespace        = "default"
+  create_namespace = true
+
+  set {
+    name  = "envs.config.KAFKA_CLUSTERS_0_NAME"
+    value = "local"
+  }
+
+  set {
+    name  = "envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS"
+    value = "one-node-cluster:9092"
+  }
+}
+
+
+//===============================================================================
+//============================ REDPANDA HELM ====================================
+//===============================================================================
+
+# resource "helm_release" "redpanda" {
+#   name             = "redpanda"
+#   repository       = "https://charts.redpanda.com"
+#   chart            = "redpanda"
+#   namespace        = "redpanda"
 #   create_namespace = true
 
 #   set {
-#     name  = "envs.config.KAFKA_CLUSTERS_0_NAME"
-#     value = "local"
-#   }
-
-#   set {
-#     name  = "envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS"
-#     value = "my-kafka:9092"
+#     name  = "installCRDs"
+#     value = "true"
 #   }
 # }
+
+//===============================================================================
+//===============================================================================
+//===============================================================================
+
+
+
+
+//===============================================================================
+//============================ REDPANDA OPERATOR ================================
+//===============================================================================
+
+resource "kubernetes_namespace" "redpanda" {
+  metadata {
+    labels = {
+      mylabel = "redpanda"
+    }
+
+    name = "redpanda"
+  }
+}
+
+data "kustomization" "redpanda-crd" {
+  provider = kustomization
+  path     = "github.com/redpanda-data/redpanda/src/go/k8s/config/crd?ref=v23.1.1"
+}
+
+resource "kustomization_resource" "redpanda-crd" {
+  provider = kustomization
+
+  for_each   = data.kustomization.redpanda-crd.ids
+  manifest   = data.kustomization.redpanda-crd.manifests[each.value]
+  depends_on = [module.olm, data.kustomization.redpanda-crd,kubernetes_namespace.redpanda]
+}
+
+resource "helm_release" "redpanda-operator" {
+  name             = "redpanda-operator"
+  repository       = "https://charts.vectorized.io/"
+  chart            = "redpanda-operator"
+  namespace        = "operators"
+  create_namespace = true
+  force_update     = true
+  depends_on = [
+    helm_release.cert-manager,
+    resource.kustomization_resource.redpanda-crd
+  ]
+}
+
+data "local_file" "redpanda" {
+  filename = "resources/redpanda.yaml"
+}
+
+resource "kubectl_manifest" "redpanda" {
+  yaml_body  = data.local_file.redpanda.content
+  depends_on = [helm_release.redpanda-operator,kubernetes_namespace.redpanda]
+}
+
+data "local_file" "redpanda-console" {
+  filename = "resources/redpanda-console.yaml"
+}
+
+resource "kubectl_manifest" "redpanda-console" {
+  yaml_body  = data.local_file.redpanda-console.content
+  depends_on = [helm_release.redpanda-operator,kubernetes_namespace.redpanda]
+}
+
+//===============================================================================
+//===============================================================================
+//===============================================================================
+
+//===============================================================================
+//============================ MONGODB & OPERATOR ================================
+//===============================================================================
+
+
+resource "helm_release" "mongodb-operator" {
+  name             = "mongodb-operator"
+  repository       = "https://mongodb.github.io/helm-charts"
+  chart            = "community-operator"
+  namespace        = "default"
+}
+
+data "local_file" "mongodb-secret" {
+  filename = "resources/mongodb-secret.yaml"
+}
+
+resource "kubectl_manifest" "mongodb-secret" {
+  yaml_body  = data.local_file.mongodb-secret.content
+}
+
+
+data "local_file" "mongodb" {
+  filename = "resources/mongodb.yaml"
+}
+
+resource "kubectl_manifest" "mongodb" {
+  yaml_body  = data.local_file.mongodb.content
+  depends_on = [helm_release.mongodb-operator,kubectl_manifest.mongodb-secret]
+}
