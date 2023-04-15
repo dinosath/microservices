@@ -317,3 +317,21 @@ resource "kubectl_manifest" "mongodb" {
   yaml_body  = data.local_file.mongodb.content
   depends_on = [helm_release.mongodb-operator,kubectl_manifest.mongodb-secret]
 }
+
+//===============================================================================
+//========================= APACHE APISIX APIGATEWAY ============================
+//===============================================================================
+
+resource "helm_release" "apisix" {
+  name             = "apisix"
+  repository       = "https://charts.apiseven.com"
+  chart            = "apisix"
+  namespace        = "default"
+}
+
+resource "helm_release" "apisix-dashboard" {
+name             = "apisix-dashboard"
+repository       = "https://charts.apiseven.com"
+chart            = "apisix-dashboard"
+namespace        = "default"
+}
