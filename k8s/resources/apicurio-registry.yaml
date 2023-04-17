@@ -28,10 +28,13 @@ spec:
         - env:
             - name: AUTH_ENABLED
               value: "false"
+            - name: QUARKUS_LOG_CONSOLE_LEVEL
+              value: DEBUG
             - name: REGISTRY_EVENTS_KAFKA_TOPIC_PARTITION
               value: "1"
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: redpanda.redpanda.svc.cluster.local:9092
+              # value: kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
             - name: KEYCLOAK_API_CLIENT_ID
               value: registry-api
             - name: REGISTRY_EVENTS_KAFKA_TOPIC

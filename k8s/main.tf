@@ -117,7 +117,7 @@ resource "kubernetes_secret" "postgres-secret" {
 
 resource "kubernetes_secret" "crazyfly-tls-secret" {
   metadata {
-    name      = "crazyfly-tls-secret"
+    name = "crazyfly-tls-secret"
   }
 
   data = {
@@ -134,7 +134,7 @@ data "local_file" "kc-postgres" {
 }
 
 resource "kubectl_manifest" "kc-postgres" {
-  yaml_body  = data.local_file.kc-postgres.content
+  yaml_body = data.local_file.kc-postgres.content
 }
 
 data "local_file" "keycloak" {
@@ -143,7 +143,7 @@ data "local_file" "keycloak" {
 
 resource "kubectl_manifest" "keycloak" {
   yaml_body  = data.local_file.keycloak.content
-  depends_on = [resource.kubectl_manifest.keycloak-operator,resource.kubectl_manifest.kc-postgres,resource.kubernetes_secret.crazyfly-tls-secret,resource.kubernetes_secret.postgres-secret]
+  depends_on = [resource.kubectl_manifest.keycloak-operator, resource.kubectl_manifest.kc-postgres, resource.kubernetes_secret.crazyfly-tls-secret, resource.kubernetes_secret.postgres-secret]
 }
 
 
@@ -162,7 +162,7 @@ resource "helm_release" "opentelemetry-operator" {
   chart            = "opentelemetry-operator"
   namespace        = "operators"
   create_namespace = true
-  depends_on = [module.olm]
+  depends_on       = [module.olm, helm_release.cert-manager]
 }
 
 data "local_file" "opentelemetry-collector" {
@@ -171,7 +171,7 @@ data "local_file" "opentelemetry-collector" {
 
 resource "kubectl_manifest" "opentelemetry-collector" {
   yaml_body  = data.local_file.opentelemetry-collector.content
-  depends_on = [data.local_file.opentelemetry-collector,resource.helm_release.opentelemetry-operator]
+  depends_on = [data.local_file.opentelemetry-collector, resource.helm_release.opentelemetry-operator]
 }
 
 
@@ -197,7 +197,7 @@ resource "helm_release" "kafka-ui" {
 
   set {
     name  = "envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS"
-    value = "one-node-cluster:9092"
+    value = "kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
   }
 }
 
@@ -250,7 +250,7 @@ resource "kustomization_resource" "redpanda-crd" {
 
   for_each   = data.kustomization.redpanda-crd.ids
   manifest   = data.kustomization.redpanda-crd.manifests[each.value]
-  depends_on = [module.olm, data.kustomization.redpanda-crd,kubernetes_namespace.redpanda]
+  depends_on = [module.olm, data.kustomization.redpanda-crd, kubernetes_namespace.redpanda]
 }
 
 resource "helm_release" "redpanda-operator" {
@@ -272,7 +272,7 @@ data "local_file" "redpanda" {
 
 resource "kubectl_manifest" "redpanda" {
   yaml_body  = data.local_file.redpanda.content
-  depends_on = [helm_release.redpanda-operator,kubernetes_namespace.redpanda]
+  depends_on = [helm_release.redpanda-operator, kubernetes_namespace.redpanda]
 }
 
 data "local_file" "redpanda-console" {
@@ -281,12 +281,8 @@ data "local_file" "redpanda-console" {
 
 resource "kubectl_manifest" "redpanda-console" {
   yaml_body  = data.local_file.redpanda-console.content
-  depends_on = [helm_release.redpanda-operator,kubernetes_namespace.redpanda]
+  depends_on = [helm_release.redpanda-operator, kubernetes_namespace.redpanda]
 }
-
-//===============================================================================
-//===============================================================================
-//===============================================================================
 
 //===============================================================================
 //============================ MONGODB & OPERATOR ================================
@@ -294,18 +290,18 @@ resource "kubectl_manifest" "redpanda-console" {
 
 
 resource "helm_release" "mongodb-operator" {
-  name             = "mongodb-operator"
-  repository       = "https://mongodb.github.io/helm-charts"
-  chart            = "community-operator"
-  namespace        = "default"
+  name       = "mongodb-operator"
+  repository = "https://mongodb.github.io/helm-charts"
+  chart      = "community-operator"
+  namespace  = "default"
 }
 
-data "local_file" "mongodb-secret" {
-  filename = "resources/mongodb-secret.yaml"
+data "local_file" "mongodb-userpass" {
+  filename = "resources/mongodb-userpass.yaml"
 }
 
-resource "kubectl_manifest" "mongodb-secret" {
-  yaml_body  = data.local_file.mongodb-secret.content
+resource "kubectl_manifest" "mongodb-userpass" {
+  yaml_body = data.local_file.mongodb-userpass.content
 }
 
 
@@ -315,8 +311,32 @@ data "local_file" "mongodb" {
 
 resource "kubectl_manifest" "mongodb" {
   yaml_body  = data.local_file.mongodb.content
-  depends_on = [helm_release.mongodb-operator,kubectl_manifest.mongodb-secret]
+  depends_on = [helm_release.mongodb-operator, kubectl_manifest.mongodb-userpass]
 }
+
+//===============================================================================
+//============================== MONGO EXPRESS ==================================
+//===============================================================================
+
+resource "helm_release" "mongo-express" {
+  chart      = "mongo-express"
+  name       = "mongo-express"
+  repository = "https://cowboysysop.github.io/charts"
+
+  set {
+    name = "mongodbServer"
+    value = "mongodb-svc"
+  }
+  set {
+    name = "mongodbAuthUsername"
+    value = "mongo"
+  }
+  set {
+    name = "mongodbAuthPassword"
+    value = "mongo123"
+  }
+}
+
 
 //===============================================================================
 //========================= APACHE APISIX APIGATEWAY ============================
@@ -326,12 +346,90 @@ resource "helm_release" "apisix" {
   name             = "apisix"
   repository       = "https://charts.apiseven.com"
   chart            = "apisix"
-  namespace        = "default"
+  namespace        = "ingress-apisix"
+  create_namespace = true
+
+  set {
+    name  = "gateway.type"
+    value = "NodePort"
+  }
+
+  set {
+    name  = "ingress-controller.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "ingress-controller.config.apisix.serviceNamespace"
+    value = "ingress-apisix"
+  }
 }
 
 resource "helm_release" "apisix-dashboard" {
-name             = "apisix-dashboard"
-repository       = "https://charts.apiseven.com"
-chart            = "apisix-dashboard"
-namespace        = "default"
+  name       = "apisix-dashboard"
+  repository = "https://charts.apiseven.com"
+  chart      = "apisix-dashboard"
+  namespace  = "ingress-apisix"
+
+  depends_on = [
+    helm_release.apisix
+  ]
+}
+
+//===============================================================================
+//================================== KEDA =======================================
+//===============================================================================
+
+resource "helm_release" "keda" {
+  name             = "keda"
+  repository       = "https://kedacore.github.io/charts"
+  chart            = "keda"
+  namespace        = "keda"
+  create_namespace = true
+}
+
+//===============================================================================
+//=============================== PROMETHEUS ====================================
+//===============================================================================
+
+data "http" "prometheus-operator" {
+  url = "https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.62.0/bundle.yaml"
+}
+
+resource "kubectl_manifest" "prometheus-operator" {
+  yaml_body  = data.http.prometheus-operator.response_body
+  depends_on = [module.olm]
+}
+
+//===============================================================================
+//================================= KAFKA =======================================
+//===============================================================================
+resource "helm_release" "kafka-operator" {
+  chart      = "strimzi-kafka-operator"
+  name       = "kafka-operator"
+  namespace  = "kafka"
+  create_namespace = true
+  repository = "https://strimzi.io/charts/"
+  depends_on = [module.olm]
+}
+
+data "local_file" "kafka" {
+  filename = "resources/kafka.yaml"
+}
+
+resource "kubectl_manifest" "kafka" {
+  yaml_body  = data.local_file.kafka.content
+  depends_on = [helm_release.kafka-operator]
+}
+
+//===============================================================================
+//================================= HARBOR ======================================
+//===============================================================================
+
+resource "helm_release" "harbor" {
+  chart      = "harbor"
+  name       = "harbor"
+  namespace  = "harbor"
+  create_namespace = true
+  repository = "https://helm.goharbor.io"
 }

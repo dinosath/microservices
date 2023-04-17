@@ -10,10 +10,10 @@ spec:
     authentication:
       modes: ["SCRAM"]
   users:
-    - name: admin
+    - name: mongo
       db: admin
       passwordSecretRef: # a reference to the secret that will be used to generate the user's password
-        name: mongodb-admin-password
+        name: mongodb-userpass
       roles:
         - name: clusterAdmin
           db: admin
@@ -22,5 +22,3 @@ spec:
       scramCredentialsSecretName: my-scram
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
-  persistent: true
-  exposedExternally: true

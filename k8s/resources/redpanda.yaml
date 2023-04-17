@@ -4,6 +4,7 @@ metadata:
   name: redpanda
   namespace: redpanda
 spec:
+  kafkaEnableAuthorization: false
   image: "vectorized/redpanda"
   version: "latest"
   replicas: 1
@@ -16,12 +17,14 @@ spec:
       memory: 1.2Gi
   additionalConfiguration:
     redpanda.cluster_id: crazyfly
+    redpanda.enable_idempotence: "true"
   configuration:
     autoCreateTopics: true
     rpcServer:
       port: 33145
     kafkaApi:
     - port: 9092
+      authenticationMethod: none
       # tls:
       #    enabled: true
       #    requireClientAuth: true

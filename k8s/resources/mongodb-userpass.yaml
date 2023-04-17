@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mongodb-admin-password
+  name: mongodb-userpass
 type: Opaque
 stringData:
-  password: admin123
+  password: mongo123
