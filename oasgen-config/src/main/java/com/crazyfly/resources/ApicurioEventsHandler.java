@@ -1,8 +1,6 @@
 package com.crazyfly.resources;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.smallrye.mutiny.Uni;
 import io.smallrye.reactive.messaging.ce.IncomingCloudEventMetadata;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -10,10 +8,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.jboss.logging.Logger;
-
-
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
 
 @ApplicationScoped
 public class ApicurioEventsHandler {
