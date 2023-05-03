@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import io.swagger.v3.parser.core.models.AuthorizationValue;
+import jakarta.validation.constraints.NotBlank;
 import org.openapitools.codegen.api.TemplateDefinition;
 
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
