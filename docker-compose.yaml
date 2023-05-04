@@ -7,6 +7,7 @@ services:
     ports:
       - '8090:8080'
     environment:
+      CORS_ALLOWED_ORIGINS: "*"
       AUTH_ENABLED: "false"
       KEYCLOAK_URL: http://localhost:8081
       KEYCLOAK_REALM: registry
@@ -44,6 +45,31 @@ services:
 #    volumes:
 #      - redpanda:/var/lib/redpanda/data
 
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka0
+      - kafka1
+      - schemaregistry0
+      - schemaregistry1
+      - kafka-connect0
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka0:29092
+      KAFKA_CLUSTERS_0_METRICS_PORT: 9997
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schemaregistry0:8085
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect0:8083
+      KAFKA_CLUSTERS_1_NAME: secondLocal
+      KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: kafka1:29092
+      KAFKA_CLUSTERS_1_METRICS_PORT: 9998
+      KAFKA_CLUSTERS_1_SCHEMAREGISTRY: http://schemaregistry1:8085
+      DYNAMIC_CONFIG_ENABLED: 'true'
+
+
   console:
     container_name: redpanda-console
     image: docker.redpanda.com/redpandadata/console:v2.2.3
@@ -78,7 +104,7 @@ services:
     image: quay.io/keycloak/keycloak
     command: start-dev
     environment:
-        KC_HOSTNAME_STRICT: false
+#        KC_HOSTNAME_STRICT: false
         KEYCLOAK_ADMIN: admin
         KEYCLOAK_ADMIN_PASSWORD: admin
         KC_DB_USERNAME: postgres

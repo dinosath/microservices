@@ -21,6 +21,7 @@ spec:
         kompose.version: 1.26.0 (40646f47)
       creationTimestamp: null
       labels:
+        network/kafka-network: "true"
         io.kompose.network/synapse: "true"
         io.kompose.service: apicurio-registry
     spec:
@@ -28,13 +29,18 @@ spec:
         - env:
             - name: AUTH_ENABLED
               value: "false"
+            - name: ENABLE_KAFKA_SASL
+              value: "false"
+            - name: REGISTRY_EVENTS_KAFKA_CONFIG_ENABLE_IDEMPOTENCE
+              value: "false"
             - name: QUARKUS_LOG_CONSOLE_LEVEL
               value: DEBUG
             - name: REGISTRY_EVENTS_KAFKA_TOPIC_PARTITION
               value: "1"
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: redpanda.redpanda.svc.cluster.local:9092
-              # value: kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+              value: redpanda-0.redpanda.redpanda.svc.cluster.local:9092
+#              value: kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+#              value: redpanda:29092
             - name: KEYCLOAK_API_CLIENT_ID
               value: registry-api
             - name: REGISTRY_EVENTS_KAFKA_TOPIC

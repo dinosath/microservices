@@ -197,7 +197,8 @@ resource "helm_release" "kafka-ui" {
 
   set {
     name  = "envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS"
-    value = "kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
+    value = "redpanda:29092"
+#    value = "kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
   }
 }
 
