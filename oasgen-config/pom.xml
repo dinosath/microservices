@@ -64,4 +64,47 @@
             <version>2.4.2.Final</version>
         </dependency>
     </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>minikube</id>
+            <properties>
+                <quarkus.profile>minikube</quarkus.profile>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.jkube</groupId>
+                        <artifactId>kubernetes-maven-plugin</artifactId>
+                        <version>1.12.0</version>
+                        <configuration>
+                            <remoteDevelopment>
+                                <remoteServices>
+                                    <remoteService>
+                                        <hostname>apicurio-registry</hostname>
+                                        <port>8080</port>
+                                        <localPort>8090</localPort>
+                                    </remoteService>
+                                    <remoteService>
+                                        <hostname>simplest-collector</hostname>
+                                        <port>4317</port>
+                                    </remoteService>
+                                    <remoteService>
+                                        <hostname>mongodb-svc</hostname>
+                                        <port>27017</port>
+                                    </remoteService>
+<!--                                    <remoteService>-->
+<!--                                        <hostname>redpanda.redpanda.svc.cluster.local</hostname>-->
+<!--                                        <port>9092</port>-->
+<!--                                    </remoteService>-->
+                                </remoteServices>
+                            </remoteDevelopment>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

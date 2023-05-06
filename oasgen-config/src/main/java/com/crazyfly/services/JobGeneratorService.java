@@ -10,6 +10,8 @@ import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
@@ -37,8 +39,12 @@ public class JobGeneratorService {
         RegistryClient client = RegistryClientFactory.create(registryUrl);
 
 
-        InputStream artifactInputStream = client.getLatestArtifact(artifact.getGroupId()!=null?artifact.getGroupId():"default",artifact.getId());
-        logger.debug("retrieved latest artifact with id:"+artifact.getId());
+        try {
+            InputStream artifactInputStream = client.getLatestArtifact(artifact.getGroupId()!=null?artifact.getGroupId():"default",artifact.getId());
+            logger.debug("retrieved latest artifact with id:"+artifact.getId());
+        }catch (io.apicurio.registry.rest.client.exception.RestClientException e){
+            throw new WebApplicationException("Connection error with apicurio registry url:"+registryUrl);
+        }
 
         final Job job = new JobBuilder()
                 .withApiVersion("batch/v1")

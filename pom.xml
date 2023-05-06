@@ -193,13 +193,5 @@
                 <quarkus.package.type>native</quarkus.package.type>
             </properties>
         </profile>
-        <profile>
-            <id>minikube</id>
-            <properties>
-                <quarkus.profile>minikube</quarkus.profile>
-                <quarkus.container-image.build>true</quarkus.container-image.build>
-                <quarkus.kubernetes.deploy>true</quarkus.kubernetes.deploy>
-            </properties>
-        </profile>
     </profiles>
 </project>
