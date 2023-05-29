@@ -14,7 +14,7 @@ public class GeneratorJobResource {
     @Inject
     JobGeneratorService jobGeneratorService;
     @POST
-    public void generate(@Valid GeneratorJobCreate generatorJobCreate){
+    public void generate(@Valid  GeneratorJobCreate generatorJobCreate){
         generatorJobCreate.getArtifacts().forEach(artifact -> jobGeneratorService.generateJob(artifact));
     }
 }
