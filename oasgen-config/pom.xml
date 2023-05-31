@@ -87,14 +87,14 @@
                                         <port>8080</port>
                                         <localPort>8090</localPort>
                                     </remoteService>
-                                    <remoteService>
-                                        <hostname>simplest-collector</hostname>
-                                        <port>4317</port>
-                                    </remoteService>
-                                    <remoteService>
-                                        <hostname>mongodb-svc</hostname>
-                                        <port>27017</port>
-                                    </remoteService>
+<!--                                    <remoteService>-->
+<!--                                        <hostname>simplest-collector</hostname>-->
+<!--                                        <port>4317</port>-->
+<!--                                    </remoteService>-->
+<!--                                    <remoteService>-->
+<!--                                        <hostname>mongodb-svc</hostname>-->
+<!--                                        <port>27017</port>-->
+<!--                                    </remoteService>-->
 <!--                                    <remoteService>-->
 <!--                                        <hostname>redpanda.redpanda.svc.cluster.local</hostname>-->
 <!--                                        <port>9092</port>-->
