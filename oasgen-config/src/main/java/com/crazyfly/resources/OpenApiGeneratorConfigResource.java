@@ -35,6 +35,15 @@ public class OpenApiGeneratorConfigResource {
         return Uni.createFrom().item(oasGeneratorConfig);
     }
 
+    @PUT
+    @Path("/{id}")
+    public Uni<Void> updateConfig(@PathParam("id") ObjectId id,@Valid OasGeneratorConfig oasGeneratorConfig){
+        oasGeneratorConfig.id = id;
+        oasGeneratorConfig.update();
+        emitter.send("OASGEN_CONFIG_UPDATE");
+        return Uni.createFrom().voidItem();
+    }
+
     @Path("/{id}")
     @DELETE
     public Response deleteConfig(@PathParam("id") ObjectId id) {
