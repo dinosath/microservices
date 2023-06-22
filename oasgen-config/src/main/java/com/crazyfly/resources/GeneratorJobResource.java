@@ -1,6 +1,6 @@
 package com.crazyfly.resources;
 
-import com.crazyfly.models.GeneratorJobCreate;
+import com.crazyfly.models.OpenApiGeneratorRequest;
 import com.crazyfly.services.JobGeneratorService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
@@ -13,8 +13,9 @@ public class GeneratorJobResource {
 
     @Inject
     JobGeneratorService jobGeneratorService;
+    
     @POST
-    public void generate(@Valid  GeneratorJobCreate generatorJobCreate){
-        generatorJobCreate.getArtifacts().forEach(artifact -> jobGeneratorService.generateJob(artifact));
+    public void generate(@Valid OpenApiGeneratorRequest openApiGeneratorRequest){
+        jobGeneratorService.generateJob(openApiGeneratorRequest.openApiUrl());
     }
 }
