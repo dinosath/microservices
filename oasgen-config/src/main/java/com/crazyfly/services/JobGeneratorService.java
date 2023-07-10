@@ -1,14 +1,16 @@
 package com.crazyfly.services;
 
-import com.crazyfly.models.Artifact;
-
-import io.fabric8.kubernetes.api.model.PersistentVolumeClaimVolumeSource;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.batch.v1.Job;
 import io.fabric8.kubernetes.api.model.batch.v1.JobBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class JobGeneratorService {
@@ -19,6 +21,14 @@ public class JobGeneratorService {
     private KubernetesClient kubernetesClient;
     
     public void generateJob(String openApiUrl){
+
+        createPvIfNotExists("oasgen","oasgen","0.5","/data/oasgen");
+        createPvcIfNotExists("oasgen","oasgen","0.5");
+
+        createPvIfNotExists("m2","m2","5","/data/m2");
+        createPvcIfNotExists("m2","m2","5");
+
+
 
         final Job job = new JobBuilder()
                 .withApiVersion("batch/v1")
@@ -32,16 +42,16 @@ public class JobGeneratorService {
                 .endMetadata()
                 .withNewSpec()
 
-                //download 
-                //  .addNewInitContainer()
-                //  .withName("download-template")
-                //  .withImage("busybox")
-                //  .withArgs("sh", "-c","cd /openapigenerator && wget https://github.com/dinosath/openapi-generator-templates/archive/refs/heads/main.zip && unzip main.zip 'openapi-generator-templates-main' -d /openapigenerator/quarkus")
-                //  .addNewVolumeMount()
-                //  .withName("oasgen-pv")
-                //  .withMountPath("/openapigenerator")
-                //  .endVolumeMount()
-                //  .endInitContainer()
+                //TODO issue with downloading and extracting the folder
+                .addNewInitContainer()
+                .withName("download-template")
+                .withImage("busybox")
+                .withArgs("sh", "-c","cd /openapigenerator && wget --no-check-certificate https://github.com/dinosath/openapi-generator-templates/archive/refs/heads/main.zip && unzip main.zip && mv openapi-generator-templates-main/* ./")
+                .addNewVolumeMount()
+                .withName("oasgen")
+                .withMountPath("/openapigenerator")
+                .endVolumeMount()
+                .endInitContainer()
 
                 //extract
                 .addNewInitContainer()
@@ -49,7 +59,7 @@ public class JobGeneratorService {
                 .withImage("busybox")
                 .withArgs("ls","/data")
                 .addNewVolumeMount()
-                .withName("oasgen-pv")
+                .withName("oasgen")
                 .withMountPath("/data")
                 .endVolumeMount()
                 .endInitContainer()
@@ -60,7 +70,7 @@ public class JobGeneratorService {
                 .withImage("openapitools/openapi-generator-cli")
                 .withArgs("generate", "-i", openApiUrl,"-c","/data/quarkus/config.yaml","-o","/data/out")
                 .addNewVolumeMount()
-                .withName("oasgen-pv")
+                .withName("oasgen")
                 .withMountPath("/data")
                 .endVolumeMount()
                 .endInitContainer()
@@ -71,11 +81,11 @@ public class JobGeneratorService {
                 .withWorkingDir("/openapigenerator/out")
                 .withArgs("mvn","package","-Pnative")
                 .addNewVolumeMount()
-                .withName("oasgen-pv")
+                .withName("oasgen")
                 .withMountPath("/openapigenerator")
                 .endVolumeMount()
                 .addNewVolumeMount()
-                .withName("m2-volume")
+                .withName("m2")
                 .withMountPath("/root/.m2")
                 .endVolumeMount()
                 .endInitContainer()
@@ -88,13 +98,13 @@ public class JobGeneratorService {
 
                 .withRestartPolicy("Never")
                 .addNewVolume()
-                .withName("oasgen-pv")
-                .withPersistentVolumeClaim(new PersistentVolumeClaimVolumeSource("oasgen-pvc", false))
+                .withName("oasgen")
+                .withPersistentVolumeClaim(new PersistentVolumeClaimVolumeSource("oasgen", false))
                 .endVolume()
 
                 .addNewVolume()
-                .withName("m2-volume")
-                .withPersistentVolumeClaim(new PersistentVolumeClaimVolumeSource("m2-repository-pvc", false))
+                .withName("m2")
+                .withPersistentVolumeClaim(new PersistentVolumeClaimVolumeSource("m2", false))
                 .endVolume()
 
                 .endSpec()
@@ -107,6 +117,51 @@ public class JobGeneratorService {
 
         kubernetesClient.batch().v1().jobs().inNamespace("default")
                 .resource(job).create();
+
+    }
+
+    private void createPvcIfNotExists(String name,String storageClassName,String storageAmount){
+        if(kubernetesClient.persistentVolumeClaims().inNamespace("default").list().getItems().stream().map(PersistentVolumeClaim::getMetadata).map(ObjectMeta::getName).noneMatch(name::equals)){
+            final PersistentVolumeClaim pvc = new PersistentVolumeClaimBuilder()
+                    .withApiVersion("v1")
+                    .withNewMetadata()
+                    .withName(name)
+                    .endMetadata()
+                    .withNewSpec()
+                    .withStorageClassName(storageClassName)
+                    .withAccessModes(List.of("ReadWriteMany"))
+                    .withNewResources()
+                    .withRequests(Map.<String, Quantity>of("storage",new QuantityBuilder().withAmount(storageAmount)
+                            .withFormat("Gi").build()))
+                    .endResources()
+                    .endSpec()
+                    .build();
+
+            kubernetesClient.persistentVolumeClaims().inNamespace("default").resource(pvc).create();
+        }
+    }
+
+    private void createPvIfNotExists(String name,String storageClassName,String storageAmount,String path){
+
+        if(kubernetesClient.persistentVolumes().list().getItems().stream().map(PersistentVolume::getMetadata).map(ObjectMeta::getName).noneMatch(name::equals)){
+            final PersistentVolume pv = new PersistentVolumeBuilder()
+                    .withApiVersion("v1")
+                    .withNewMetadata()
+                    .withName(name)
+                    .endMetadata()
+                    .withNewSpec()
+                    .withStorageClassName(storageClassName)
+                    .withCapacity(Map.<String, Quantity>of("storage",new QuantityBuilder().withAmount(storageAmount)
+                            .withFormat("Gi").build()))
+                    .withAccessModes(List.of("ReadWriteMany"))
+                    .withNewHostPath()
+                    .withPath(path)
+                    .endHostPath()
+                    .endSpec()
+                    .build();
+
+            kubernetesClient.persistentVolumes().resource(pv).create();
+        }
 
     }
 }
