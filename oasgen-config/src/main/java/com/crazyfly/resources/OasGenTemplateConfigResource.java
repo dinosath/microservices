@@ -1,6 +1,6 @@
 package com.crazyfly.resources;
 
-import com.crazyfly.models.OasGeneratorConfig;
+import com.crazyfly.models.OasGenTemplate;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -15,31 +15,31 @@ import java.util.List;
 
 @ApplicationScoped
 @Path("/oas_gen/configs")
-public class OpenApiGeneratorConfigResource {
-    private static final Logger logger = Logger.getLogger(OpenApiGeneratorConfigResource.class);
+public class OasGenTemplateConfigResource {
+    private static final Logger logger = Logger.getLogger(OasGenTemplateConfigResource.class);
 
     @Channel("oasgen-config-events")
     Emitter<String> emitter;
 
     @GET
-    public List<OasGeneratorConfig> getConfigs() {
-        return OasGeneratorConfig.listAll();
+    public List<OasGenTemplate> getConfigs() {
+        return OasGenTemplate.listAll();
     }
 
     @POST
-    public Uni<OasGeneratorConfig> createConfig(@Valid OasGeneratorConfig oasGeneratorConfig) {
+    public Uni<OasGenTemplate> createConfig(@Valid OasGenTemplate oasGenTemplate) {
         emitter.send("creating new oasgen");
-        oasGeneratorConfig.persist();
-        logger.debug("Created oasGeneratorConfig:"+oasGeneratorConfig.id);
-        emitter.send(String.valueOf(oasGeneratorConfig.id));
-        return Uni.createFrom().item(oasGeneratorConfig);
+        oasGenTemplate.persist();
+        logger.debug("Created oasGeneratorConfig:"+ oasGenTemplate.id);
+        emitter.send(String.valueOf(oasGenTemplate.id));
+        return Uni.createFrom().item(oasGenTemplate);
     }
 
     @PUT
     @Path("/{id}")
-    public Uni<Void> updateConfig(@PathParam("id") ObjectId id,@Valid OasGeneratorConfig oasGeneratorConfig){
-        oasGeneratorConfig.id = id;
-        oasGeneratorConfig.update();
+    public Uni<Void> updateConfig(@PathParam("id") ObjectId id,@Valid OasGenTemplate oasGenTemplate){
+        oasGenTemplate.id = id;
+        oasGenTemplate.update();
         emitter.send("OASGEN_CONFIG_UPDATE");
         return Uni.createFrom().voidItem();
     }
@@ -48,7 +48,7 @@ public class OpenApiGeneratorConfigResource {
     @DELETE
     public Response deleteConfig(@PathParam("id") ObjectId id) {
         logger.debug("deleteting "+id);
-        boolean deleted = OasGeneratorConfig.deleteById(id);
+        boolean deleted = OasGenTemplate.deleteById(id);
         return deleted ? Response.noContent().build() : Response.status(404).build();
     }
 

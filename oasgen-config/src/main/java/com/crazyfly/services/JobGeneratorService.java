@@ -46,7 +46,7 @@ public class JobGeneratorService {
                 .addNewInitContainer()
                 .withName("download-template")
                 .withImage("busybox")
-                .withArgs("sh", "-c","cd /openapigenerator && wget --no-check-certificate https://github.com/dinosath/openapi-generator-templates/archive/refs/heads/main.zip && unzip main.zip && mv openapi-generator-templates-main/* ./")
+                .withArgs("sh", "-c","cd /openapigenerator && if [ ! -f main.zip ]; then  wget --no-check-certificate https://github.com/dinosath/openapi-generator-templates/archive/refs/heads/main.zip;  else echo \"file already exists so download will be skipped\"; fi && unzip main.zip && mv openapi-generator-templates-main/* ./")
                 .addNewVolumeMount()
                 .withName("oasgen")
                 .withMountPath("/openapigenerator")
