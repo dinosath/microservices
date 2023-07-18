@@ -16,6 +16,6 @@ public class GeneratorJobResource {
     
     @POST
     public void generate(@Valid OpenApiGeneratorRequest openApiGeneratorRequest){
-        jobGeneratorService.generateJob(openApiGeneratorRequest.openApiUrl());
+        jobGeneratorService.generateJob(openApiGeneratorRequest.openApiUrl(),openApiGeneratorRequest.oasGenTemplateId());
     }
 }
