@@ -2,6 +2,7 @@ package com.crazyfly.services;
 
 import com.crazyfly.models.OasGenTemplate;
 import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.PathParam;
@@ -11,6 +12,7 @@ import org.hibernate.reactive.mutiny.Mutiny;
 
 import java.util.List;
 
+@ApplicationScoped
 public class OasGenTemplateCrudService {
 
     @Channel("oasgen-templates-events")
