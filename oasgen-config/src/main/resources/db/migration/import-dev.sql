@@ -1,0 +1,12 @@
+CREATE SCHEMA IF NOT EXISTS oasgen;
+--
+--CREATE TABLE IF NOT EXISTS oasgen.templates (
+--    id bigserial not null,
+--    downloadUrl varchar(255),
+--    fileSubDirectory varchar(255),
+--    image varchar(255),
+--    name varchar(255) unique,
+--    primary key (id)
+--);
+--
+--INSERT INTO oasgen_templates(id,name,downloadUrl,outputDirectory,image,commands) VALUES (1,"quarkus","https://github.com/dinosath/openapi-generator-templates/archive/refs/heads/main.zip","openapi-generator-templates-main","maven:3-eclipse-temurin-17-alpine","mvn,package,-Pnative");
