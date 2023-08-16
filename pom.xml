@@ -21,7 +21,6 @@
 
     <modules>
         <module>oasgen-config</module>
-        <module>oasgen</module>
     </modules>
 
     <dependencyManagement>
