@@ -25,7 +25,7 @@ public class OasGenTemplatesResource {
     }
 
     @POST
-    public Uni<OasGenTemplate> createOasGenTemplate(@Valid OasGenTemplate oasGenTemplate) {
+    public Uni<Void> createOasGenTemplate(@Valid OasGenTemplate oasGenTemplate) {
         return oasGenTemplateCrudService.createOasGenTemplate(oasGenTemplate);
     }
 
