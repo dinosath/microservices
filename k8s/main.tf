@@ -3,10 +3,10 @@ module "olm" {
   version = "0.2.0"
 }
 
-resource "helm_release" "redis" {
-  name       = "redis"
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "redis"
+resource "helm_release" "redis-cluster" {
+  name       = "redis-cluster"
+  repository = "oci://registry-1.docker.io/bitnamicharts"
+  chart      = "redis-cluster"
 }
 
 resource "helm_release" "nginx_ingress" {
@@ -14,8 +14,6 @@ resource "helm_release" "nginx_ingress" {
   repository       = "https://charts.bitnami.com/bitnami"
   chart            = "nginx-ingress-controller"
   namespace        = "nginx-ingress-controller"
-  create_namespace = true
-  force_update     = true
 
   set {
     name  = "service.type"
@@ -260,7 +258,6 @@ resource "helm_release" "redpanda-operator" {
   chart            = "redpanda-operator"
   namespace        = "operators"
   create_namespace = true
-  force_update     = true
   depends_on = [
     helm_release.cert-manager,
     resource.kustomization_resource.redpanda-crd
@@ -283,59 +280,6 @@ data "local_file" "redpanda-console" {
 resource "kubectl_manifest" "redpanda-console" {
   yaml_body  = data.local_file.redpanda-console.content
   depends_on = [helm_release.redpanda-operator, kubernetes_namespace.redpanda]
-}
-
-//===============================================================================
-//============================ MONGODB & OPERATOR ================================
-//===============================================================================
-
-
-resource "helm_release" "mongodb-operator" {
-  name       = "mongodb-operator"
-  repository = "https://mongodb.github.io/helm-charts"
-  chart      = "community-operator"
-  namespace  = "default"
-}
-
-data "local_file" "mongodb-userpass" {
-  filename = "resources/mongodb-userpass.yaml"
-}
-
-resource "kubectl_manifest" "mongodb-userpass" {
-  yaml_body = data.local_file.mongodb-userpass.content
-}
-
-
-data "local_file" "mongodb" {
-  filename = "resources/mongodb.yaml"
-}
-
-resource "kubectl_manifest" "mongodb" {
-  yaml_body  = data.local_file.mongodb.content
-  depends_on = [helm_release.mongodb-operator, kubectl_manifest.mongodb-userpass]
-}
-
-//===============================================================================
-//============================== MONGO EXPRESS ==================================
-//===============================================================================
-
-resource "helm_release" "mongo-express" {
-  chart      = "mongo-express"
-  name       = "mongo-express"
-  repository = "https://cowboysysop.github.io/charts"
-
-  set {
-    name = "mongodbServer"
-    value = "mongodb-svc"
-  }
-  set {
-    name = "mongodbAuthUsername"
-    value = "mongo"
-  }
-  set {
-    name = "mongodbAuthPassword"
-    value = "mongo123"
-  }
 }
 
 
