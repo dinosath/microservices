@@ -34,23 +34,24 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-data "http" "postgresql-operator" {
-  url = "https://operatorhub.io/install/postgresql.yaml"
-}
+resource "helm_release" "postgresql-operator" {
+  name             = "postgresql-operator"
+  repository       = "oci://registry.developers.crunchydata.com/crunchydata"
+  chart            = "pgo"
+  namespace        = "postgresql"
+  create_namespace = true
 
-resource "kubectl_manifest" "postgresql-operator" {
-  yaml_body  = data.http.postgresql-operator.response_body
   depends_on = [module.olm]
 }
 
 data "local_file" "postgres" {
-  filename = "resources/postgres-cluster.crd.yaml"
+  filename = "resources/postgres-cluster.yaml"
 }
 
 
 resource "kubectl_manifest" "postgresql" {
   yaml_body  = data.local_file.postgres.content
-  depends_on = [resource.kubectl_manifest.postgresql-operator]
+  depends_on = [resource.helm_release.postgresql-operator]
 }
 
 data "http" "apicurio-registry-operator" {
@@ -81,7 +82,7 @@ resource "kubectl_manifest" "keycloak-crd" {
 }
 
 data "http" "keycloak-realm-imports" {
-  url = "https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/21.0.1/kubernetes/keycloakrealmimports.k8s.keycloak.org-v1.yml"
+  url = "https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/22.0.4/kubernetes/keycloakrealmimports.k8s.keycloak.org-v1.yml"
 }
 
 resource "kubectl_manifest" "keycloak-realm-imports" {
@@ -90,7 +91,7 @@ resource "kubectl_manifest" "keycloak-realm-imports" {
 }
 
 data "http" "keycloak-operator" {
-  url = "https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/21.0.1/kubernetes/kubernetes.yml"
+  url = "https://operatorhub.io/install/keycloak-operator.yaml"
 }
 
 resource "kubectl_manifest" "keycloak-operator" {
@@ -127,32 +128,14 @@ resource "kubernetes_secret" "crazyfly-tls-secret" {
   type = "kubernetes.io/tls"
 }
 
-data "local_file" "kc-postgres" {
-  filename = "resources/postgres.yaml"
-}
-
-resource "kubectl_manifest" "kc-postgres" {
-  yaml_body = data.local_file.kc-postgres.content
-}
-
 data "local_file" "keycloak" {
   filename = "resources/keycloak.yaml"
 }
 
 resource "kubectl_manifest" "keycloak" {
   yaml_body  = data.local_file.keycloak.content
-  depends_on = [resource.kubectl_manifest.keycloak-operator, resource.kubectl_manifest.kc-postgres, resource.kubernetes_secret.crazyfly-tls-secret, resource.kubernetes_secret.postgres-secret]
+  depends_on = [resource.kubectl_manifest.keycloak-operator, resource.kubernetes_secret.crazyfly-tls-secret, resource.kubernetes_secret.postgres-secret]
 }
-
-
-resource "helm_release" "argo-events" {
-  name             = "argo-events"
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argo-events"
-  namespace        = "default"
-  create_namespace = true
-}
-
 
 resource "helm_release" "opentelemetry-operator" {
   name             = "opentelemetry-operator"
@@ -172,33 +155,6 @@ resource "kubectl_manifest" "opentelemetry-collector" {
   depends_on = [data.local_file.opentelemetry-collector, resource.helm_release.opentelemetry-operator]
 }
 
-
-# resource "helm_release" "kafka" {
-#   name             = "kafka"
-#   repository       = "https://packages.vectorized.io/public/console/helm/charts/"
-#   chart            = "console"
-#   namespace        = "default"
-#   create_namespace = true
-# }
-
-resource "helm_release" "kafka-ui" {
-  name             = "kafka-ui"
-  repository       = "https://provectus.github.io/kafka-ui"
-  chart            = "kafka-ui"
-  namespace        = "default"
-  create_namespace = true
-
-  set {
-    name  = "envs.config.KAFKA_CLUSTERS_0_NAME"
-    value = "local"
-  }
-
-  set {
-    name  = "envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS"
-    value = "redpanda:29092"
-#    value = "kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
-  }
-}
 
 
 //===============================================================================
@@ -258,6 +214,7 @@ resource "helm_release" "redpanda-operator" {
   chart            = "redpanda-operator"
   namespace        = "operators"
   create_namespace = true
+  
   depends_on = [
     helm_release.cert-manager,
     resource.kustomization_resource.redpanda-crd
@@ -281,7 +238,6 @@ resource "kubectl_manifest" "redpanda-console" {
   yaml_body  = data.local_file.redpanda-console.content
   depends_on = [helm_release.redpanda-operator, kubernetes_namespace.redpanda]
 }
-
 
 //===============================================================================
 //========================= APACHE APISIX APIGATEWAY ============================
@@ -366,6 +322,28 @@ resource "kubectl_manifest" "kafka" {
   yaml_body  = data.local_file.kafka.content
   depends_on = [helm_release.kafka-operator]
 }
+
+resource "helm_release" "kafka-ui" {
+  name             = "kafka-ui"
+  repository       = "https://provectus.github.io/kafka-ui"
+  chart            = "kafka-ui"
+  namespace        = "default"
+  create_namespace = true
+
+  set {
+    name  = "envs.config.KAFKA_CLUSTERS_0_NAME"
+    value = "local"
+  }
+
+  set {
+    name  = "envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS"
+    value = "redpanda:29092"
+#    value = "kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092"
+  }
+
+  depends_on = [resource.kubectl_manifest.kafka]
+}
+
 
 //===============================================================================
 //================================= HARBOR ======================================
