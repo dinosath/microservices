@@ -1,13 +1,13 @@
 resource "helm_release" "postgresql" {
   name       = "postgresql"
-  repository = "oci://registry-1.docker.io/bitnamicharts"
+  repository = "https://charts.bitnami.com/bitnami"
   chart      = "postgresql"
 }
 
 
 resource "helm_release" "redis-cluster" {
   name       = "redis-cluster"
-  repository = "oci://registry-1.docker.io/bitnamicharts"
+  repository = "https://charts.bitnami.com/bitnami"
   chart      = "redis-cluster"
 }
 
@@ -16,7 +16,7 @@ resource "helm_release" "nginx_ingress" {
   repository       = "https://charts.bitnami.com/bitnami"
   chart            = "nginx-ingress-controller"
   namespace        = "nginx-ingress-controller"
-
+  create_namespace = true
   set {
     name  = "service.type"
     value = "ClusterIP"
@@ -42,6 +42,7 @@ resource "helm_release" "apicurio-registry" {
    chart            = "apicurio-registry"
    namespace        = "apicurio-registry"
    create_namespace = true
+   version = "3.7.0"
 
   set {
     name  = "mode"
@@ -53,7 +54,7 @@ resource "helm_release" "apicurio-registry" {
 
 resource "helm_release" "keycloak" {
    name             = "keycloak"
-   repository       = "oci://registry-1.docker.io/bitnamicharts"
+   repository       = "https://charts.bitnami.com/bitnami"
    chart            = "keycloak"
    namespace        = "keycloak"
    create_namespace = true
@@ -87,6 +88,11 @@ resource "helm_release" "keycloak" {
    chart            = "redpanda"
    namespace        = "redpanda"
    create_namespace = true
+
+   set {
+    name = "statefulset.replicas"
+    value = "1"
+   }
 
   depends_on = [
     helm_release.cert-manager
