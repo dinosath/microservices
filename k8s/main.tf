@@ -1,3 +1,11 @@
+locals {
+  keycloak_internal_url = "http://${helm_release.keycloak.name}.${helm_release.keycloak.namespace}.svc.cluster.local"
+}
+
+
+# Helm chart for postgres
+# https://artifacthub.io/packages/helm/bitnami/postgresql
+# https://github.com/bitnami/charts/tree/main/bitnami/postgresql
 resource "helm_release" "postgresql" {
   name       = "postgresql"
   repository = "https://charts.bitnami.com/bitnami"
@@ -38,17 +46,11 @@ resource "helm_release" "cert-manager" {
 
 resource "helm_release" "apicurio-registry" {
    name             = "apicurio-registry"
-   repository       = "oci://ghcr.io/eshepelyuk/helm"
-   chart            = "apicurio-registry"
+   repository       = "https://one-acre-fund.github.io/oaf-public-charts"
+   chart            = "apicurio"
    namespace        = "apicurio-registry"
    create_namespace = true
-   version = "3.7.0"
-
-  set {
-    name  = "mode"
-    value = "deployment"
-  }
-
+   version = "1.0.15"
  }
 
 
@@ -63,8 +65,16 @@ resource "helm_release" "keycloak" {
     name  = "mode"
     value = "deployment"
   }
-
+  set {
+    name  = "ingress.enabled"
+    value = "true"
+  }	
  }
+
+ output "keycloak_url" {
+  value = "http://${helm_release.keycloak.status.load_balancer.ingress[0].hostname}"
+}
+
 
 
  resource "helm_release" "opentelemetry-collector" {
@@ -152,6 +162,14 @@ resource "helm_release" "prometheus" {
   create_namespace = true
 }
 
+resource "helm_release" "microcks" {
+  chart      = "microcks"
+  name       = "microcks"
+  namespace  = "microcks"
+  create_namespace = true
+  repository = "https://microcks.io/helm"
+  version = "1.8.1"
+}
 
 resource "helm_release" "harbor" {
   chart      = "harbor"
