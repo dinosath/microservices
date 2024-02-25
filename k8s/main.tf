@@ -1,5 +1,6 @@
 locals {
-  keycloak_internal_url = "http://${helm_release.keycloak.name}.${helm_release.keycloak.namespace}.svc.cluster.local"
+  keycloak_internal_url = "${helm_release.keycloak.name}.${helm_release.keycloak.namespace}.svc.cluster.local"
+  postgresql_internal_url = "${helm_release.postgresql.name}-postgresql-ha-pgpool.${helm_release.postgresql.namespace}.svc.cluster.local"
 }
 
 
@@ -9,7 +10,18 @@ locals {
 resource "helm_release" "postgresql" {
   name       = "postgresql"
   repository = "https://charts.bitnami.com/bitnami"
-  chart      = "postgresql"
+  chart      = "postgresql-ha"
+  namespace = "postgresql"
+  create_namespace = true
+}
+
+data "kubernetes_secret" "postgresql_secret" {
+  metadata {
+    name      = "${helm_release.postgresql.metadata[0].name}-postgresql-ha-postgresql"
+    namespace = helm_release.postgresql.metadata[0].namespace
+  }
+
+  depends_on = [ helm_release.postgresql ]
 }
 
 
@@ -44,15 +56,6 @@ resource "helm_release" "cert-manager" {
   }
 }
 
-resource "helm_release" "apicurio-registry" {
-   name             = "apicurio-registry"
-   repository       = "https://one-acre-fund.github.io/oaf-public-charts"
-   chart            = "apicurio"
-   namespace        = "apicurio-registry"
-   create_namespace = true
-   version = "1.0.15"
- }
-
 
 resource "helm_release" "keycloak" {
    name             = "keycloak"
@@ -69,11 +72,28 @@ resource "helm_release" "keycloak" {
     name  = "ingress.enabled"
     value = "true"
   }	
- }
+  # set {
+  #   name  = "postgresql.enabled"
+  #   value = "false"
+  # }	
 
- output "keycloak_url" {
-  value = "http://${helm_release.keycloak.status.load_balancer.ingress[0].hostname}"
-}
+  # set {
+  #   name  = "externalDatabase.host"
+  #   value = "${local.postgresql_internal_url}"
+  # }	
+  # set {
+  #   name  = "externalDatabase.user"
+  #   value = "postgres"
+  # }	
+
+  # set {
+  #   name  = "externalDatabase.password"
+  #   value = data.kubernetes_secret.postgresql_secret.data["password"]
+  # }	
+
+  # depends_on = [ data.kubernetes_secret.postgresql_secret ]
+  
+ }
 
 
 

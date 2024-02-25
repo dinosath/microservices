@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: keycloak-realm-upload
+  namespace: {{ .Values.namespace }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: keycloak-upload
+        image: curlimages/curl
+        command: ["curl", "-X", "POST", "-H", "Content-Type: application/json", "-d", "@/realm/realm.json", "{{ .Values.auth.url }}/auth/admin/realms"]
+        volumeMounts:
+        - name: realm-config
+          mountPath: /realm
+      restartPolicy: Never
+      volumes:
+      - name: realm-config
+        configMap:
+          name: keycloak-realm-config

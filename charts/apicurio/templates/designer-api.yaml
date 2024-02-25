@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apicurio-designer
+    component: apicurio-designer-api
+  name: apicurio-designer-api
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.designer.api.replicaCount }}
+  selector:
+    matchLabels: 
+      component: apicurio-designer-api
+  template:
+    metadata:
+      labels:
+        app: apicurio-designer
+        component: apicurio-designer-api
+    spec:
+      containers:
+      - image: quay.io/apicurio/apicurio-api-designer-sql:latest-snapshot
+        name: apicurio-designer-api
+        ports:
+          - name: web
+            containerPort: 8080
+            protocol: TCP
+        envFrom:
+          - configMapRef:
+              name: designer-api-config
+        livenessProbe:
+          httpGet:
+            path: /apis/designer/v0/system/info
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: {{ .Values.designer.api.livenessProbe.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.designer.api.livenessProbe.timeoutSeconds }}
+          periodSeconds: {{ .Values.designer.api.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.designer.api.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.designer.api.livenessProbe.failureThreshold }}
+        readinessProbe:
+          httpGet:
+            path: /apis/designer/v0/system/info
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: {{ .Values.designer.api.readinessProbe.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.designer.api.readinessProbe.timeoutSeconds }}
+          periodSeconds: {{ .Values.designer.api.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.designer.api.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.designer.api.readinessProbe.failureThreshold }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apicurio-designer
+    template: apicurio-designer-api
+  name: apicurio-designer-api
+spec:
+  selector:
+    component: apicurio-designer-api
+  ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+---
+{{- if .Values.designer.api.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: apicurio-designer
+    template: apicurio-designer-api
+  name: apicurio-designer-api
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - host: {{ .Values.designer.api.ingress.host }}
+      http:
+        paths:
+          - path: /(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: apicurio-designer-api
+                port:
+                  number: 8080
+{{- end }}

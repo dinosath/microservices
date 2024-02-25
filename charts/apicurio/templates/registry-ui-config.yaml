@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-ui-config
+  namespace: {{ .Values.namespace }}
+data:
+  REGISTRY_API_URL: "http://registry-api.local/apis/registry/v2"
+  REGISTRY_AUTH_TYPE: "oidc"
+  REGISTRY_AUTH_URL: "{{ .Values.auth.url }}"
+  REGISTRY_AUTH_CLIENT_ID: "registry-ui"
+  REGISTRY_AUTH_REDIRECT_URL: "http://registry.local/"
+  REGISTRY_AUTH_RBAC_ENABLED: "true"
+  REGISTRY_FEATURE_ROLE_MANAGEMENT: "false"
+  REGISTRY_FEATURE_SETTINGS: "true"

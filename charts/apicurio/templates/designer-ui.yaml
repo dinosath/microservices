@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apicurio-designer
+    component: apicurio-designer-ui
+  name: apicurio-designer-ui
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.designer.ui.replicaCount }}
+  selector:
+    matchLabels: 
+      component: apicurio-designer-ui
+  template:
+    metadata:
+      labels:
+        app: apicurio-designer
+        component: apicurio-designer-ui
+    spec:
+      containers:
+      - image: quay.io/apicurio/apicurio-api-designer-ui:latest-snapshot
+        name: apicurio-designer-ui
+        ports:
+          - name: web
+            containerPort: 8080
+            protocol: TCP
+        envFrom:
+          - configMapRef:
+              name: designer-ui-config
+        resources:
+{{ toYaml .Values.designer.ui.resources | indent 10 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apicurio-designer
+    template: apicurio-designer-ui
+  name: apicurio-designer-ui
+spec:
+  selector:
+    component: apicurio-designer-ui
+  ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+---
+{{- if .Values.designer.ui.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: apicurio-designer
+    template: apicurio-designer-ui
+  name: apicurio-designer-ui
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - host: {{ .Values.designer.ui.ingress.host }}
+      http:
+        paths:
+          - path: /(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: apicurio-designer-ui
+                port:
+                  number: 8080
+{{- end }}

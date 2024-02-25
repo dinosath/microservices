@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-config
+  namespace: {{ .Values.namespace }}
+data:
+  LOG_LEVEL: "DEBUG"
+  REGISTRY_LOG_LEVEL: "DEBUG"
+  ENABLE_ACCESS_LOG: "true"
+  QUARKUS_PROFILE: "prod"
+  CORS_ALLOWED_ORIGINS: "*"
+  AUTH_ENABLED: "true"
+  KEYCLOAK_URL: "{{ .Values.auth.url }}"
+  KEYCLOAK_REALM: "apicurio"
+  KEYCLOAK_API_CLIENT_ID: "registry-api"
+  REGISTRY_DATASOURCE_URL: "jdbc:postgresql://apicurio-registry-postgresql:5432/apicuriodb"
+  REGISTRY_DATASOURCE_USERNAME: "pguser"
+  REGISTRY_DATASOURCE_PASSWORD: "pgpass12345"

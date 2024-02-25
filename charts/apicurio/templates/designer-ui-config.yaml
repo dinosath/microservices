@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: designer-ui-config
+  namespace: {{ .Values.namespace }}
+data:
+  DESIGNER_API_URL: "http://{{.Values.designer.api.ingress.host}}/apis/designer/v0"
+  DESIGNER_AUTH_TYPE: "oidc"
+  DESIGNER_AUTH_URL: "{{ .Values.auth.url }}"
+  DESIGNER_AUTH_CLIENT_ID: "designer-ui"
+  DESIGNER_AUTH_REDIRECT_URL: "http://{{.Values.designer.ui.ingress.host}}"
