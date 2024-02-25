@@ -15,7 +15,7 @@ namespace: "apicurio"
 
 auth:
   enabled: true
-  url: keycloak.keycloak.svc.cluster.local:8080/realms/apicurio
+  url: keycloak.keycloak.svc.cluster.local/realms/apicurio
 
 designer:
   ui:

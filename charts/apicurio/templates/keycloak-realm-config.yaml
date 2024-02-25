@@ -5,4 +5,4 @@ metadata:
   namespace: {{ .Values.namespace }}
 data:
   realm.json: |-
-    {{ .Files.Get "files/keycloak-realm-full.json" | indent 4 }}
+    {{ .Files.Get "files/keycloak-realm-full.json" | nindent 4 }}
