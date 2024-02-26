@@ -72,6 +72,11 @@ resource "helm_release" "keycloak" {
     name  = "ingress.enabled"
     value = "true"
   }	
+
+  set {
+    name  = "rbac.create"
+    value = "true"
+  }	
   # set {
   #   name  = "postgresql.enabled"
   #   value = "false"
