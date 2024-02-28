@@ -10,7 +10,7 @@ data:
   QUARKUS_PROFILE: "prod"
   CORS_ALLOWED_ORIGINS: "*"
   AUTH_ENABLED: "true"
-  KEYCLOAK_URL: "{{ .Values.auth.url }}"
+  KEYCLOAK_URL: "http://{{ .Values.auth.url }}:8080"
   KEYCLOAK_REALM: "apicurio"
   KEYCLOAK_API_CLIENT_ID: "registry-api"
   REGISTRY_DATASOURCE_URL: "jdbc:postgresql://apicurio-registry-postgresql:5432/apicuriodb"

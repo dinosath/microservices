@@ -8,8 +8,33 @@ spec:
     spec:
       containers:
       - name: keycloak-upload
-        image: curlimages/curl
-        command: ["curl", "-X", "POST", "-H", "Content-Type: application/json", "-d", "@/realm/realm.json", "{{ .Values.auth.url }}/auth/admin/realms"]
+        image: softonic/curl-jq:3.18.3
+        command: ["sh", "-c"]
+        args:
+        - |
+            echo "KEYCLOAK_ADMIN:$KEYCLOAK_ADMIN";
+            echo "KEYCLOAK_ADMIN_PASSWORD:$KEYCLOAK_ADMIN_PASSWORD";
+            TOKEN_RESPONSE=$(curl -s -v -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "username=$KEYCLOAK_ADMIN&password=$KEYCLOAK_ADMIN_PASSWORD&grant_type=password&client_id=admin-cli" $KEYCLOAK_URL/realms/master/protocol/openid-connect/token)
+            echo "TOKEN_RESPONSE:$TOKEN_RESPONSE"
+            ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.access_token')
+            RESPONSE=$(curl -s -v -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" --data @/realm/realm.json $KEYCLOAK_URL/admin/realms); 
+            echo "RESPONSE:$RESPONSE"
+
+        env:
+        - name: KEYCLOAK_URL
+          value: {{ .Values.auth.url }}
+        - name: REALM_NAME
+          value: {{ .Values.auth.realm }}
+        - name: KEYCLOAK_ADMIN
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-admin
+              key: KEYCLOAK_ADMIN
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-admin
+              key: KEYCLOAK_ADMIN_PASSWORD
         volumeMounts:
         - name: realm-config
           mountPath: /realm

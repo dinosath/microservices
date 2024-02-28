@@ -14,8 +14,18 @@ image:
 namespace: "apicurio"
 
 auth:
+  realm: apicurio
   enabled: true
-  url: keycloak.keycloak.svc.cluster.local/realms/apicurio
+  url: keycloak.keycloak.svc.cluster.local
+  secret:
+    adminUsername: "admin"
+    adminPassword: "admin"
+  existingSecret: ""
+  existingSecretAdminUsernameKey: ""
+  existingSecretAdminPasswordKey: ""
+
+postgresql:
+  enabled: true
 
 designer:
   ui:
@@ -84,7 +94,7 @@ registry:
       pullPolicy: IfNotPresent
     ingress:
       enabled: true
-      host: designer.local
+      host: registry.local
     resources:
       limits:
         cpu: 250m
@@ -113,7 +123,7 @@ registry:
       pullPolicy: IfNotPresent
     ingress:
       enabled: true
-      host: designer-api.local
+      host: registry-api.local
     resources:
       limits:
         cpu: 500m

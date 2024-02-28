@@ -24,6 +24,27 @@ data "kubernetes_secret" "postgresql_secret" {
   depends_on = [ helm_release.postgresql ]
 }
 
+data "kubernetes_secret" "keycloak_secret" {
+  metadata {
+    name      = helm_release.keycloak.metadata[0].name
+    namespace = helm_release.postgresql.metadata[0].namespace
+  }
+
+  depends_on = [ helm_release.keycloak ]
+}
+
+resource "kubernetes_secret" "apicurio_keycloak_secret" {
+  metadata {
+    name      = data.kubernetes_secret.keycloak_secret.metadata[0].name
+    namespace = "apicurio"
+  }
+
+  data = data.kubernetes_secret.keycloak_secret.data
+  type = data.kubernetes_secret.keycloak_secret.type
+
+
+  depends_on = [ data.kubernetes_secret.keycloak_secret ]
+}
 
 resource "helm_release" "redis-cluster" {
   name       = "redis-cluster"
@@ -77,6 +98,36 @@ resource "helm_release" "keycloak" {
     name  = "rbac.create"
     value = "true"
   }	
+  set {
+    name  = "serviceAccount.name"
+    value = "keycloak-service-account"
+  }
+
+  set {
+    name  = "rbac.rules[0].apiGroups[0]"
+    value = ""
+  }
+
+  set {
+    name  = "rbac.rules[0].resources[0]"
+    value = "secrets"
+  }
+
+  set {
+    name  = "rbac.rules[0].verbs[0]"
+    value = "get"
+  }
+
+  set {
+    name  = "rbac.rules[0].verbs[1]"
+    value = "watch"
+  }
+
+  set {
+    name  = "rbac.rules[0].verbs[2]"
+    value = "list"
+  }
+
   # set {
   #   name  = "postgresql.enabled"
   #   value = "false"
