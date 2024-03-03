@@ -13,6 +13,22 @@ image:
 
 namespace: "apicurio"
 
+externalDatabase:
+  enabled: false
+  host: ""
+  port: 5432
+  database: "apicurio"
+  secret:
+    password: ""
+    username: ""
+  existingSecret: ""
+  existingSecretHostKey: ""
+  existingSecretPortKey: ""
+  existingSecretUserKey: ""
+  existingSecretDatabaseKey: ""
+  existingSecretPasswordKey: ""
+  annotations: ""
+
 auth:
   realm: apicurio
   enabled: true

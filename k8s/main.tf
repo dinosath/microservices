@@ -27,10 +27,10 @@ data "kubernetes_secret" "postgresql_secret" {
 data "kubernetes_secret" "keycloak_secret" {
   metadata {
     name      = helm_release.keycloak.metadata[0].name
-    namespace = helm_release.postgresql.metadata[0].namespace
+    namespace = helm_release.keycloak.metadata[0].namespace
   }
 
-  depends_on = [ helm_release.keycloak ]
+  depends_on = [helm_release.keycloak]
 }
 
 resource "kubernetes_secret" "apicurio_keycloak_secret" {
@@ -43,7 +43,7 @@ resource "kubernetes_secret" "apicurio_keycloak_secret" {
   type = data.kubernetes_secret.keycloak_secret.type
 
 
-  depends_on = [ data.kubernetes_secret.keycloak_secret ]
+  depends_on = [ data.kubernetes_secret.keycloak_secret, helm_release.apicurio ]
 }
 
 resource "helm_release" "redis-cluster" {
@@ -150,6 +150,41 @@ resource "helm_release" "keycloak" {
   # depends_on = [ data.kubernetes_secret.postgresql_secret ]
   
  }
+
+
+resource "helm_release" "apicurio" {
+  name       = "apicurio"
+  namespace  = "apicurio"
+  chart      = "../charts/apicurio"
+  create_namespace = true
+
+  set {
+    name  = "auth.secret.adminUsername"
+    value = "user"
+  }
+  set {
+    name  = "auth.secret.adminPassword"
+    value = "eAdu6JAJFN"
+  }
+  set {
+    name  = "externalDatabase.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "externalDatabase.host"
+    value = "postgresql-postgresql-ha-pgpool.postgresql.svc.cluster.local"
+  }
+  set {
+    name  = "externalDatabase.secret.password"
+    value = "Bveq9D8rYY"
+  }
+  set {
+    name  = "externalDatabase.secret.username"
+    value = "postgres"
+  }
+  
+}
 
 
 
