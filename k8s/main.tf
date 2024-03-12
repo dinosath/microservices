@@ -1,3 +1,28 @@
+# variable "TFC_AGENT_NAME" {
+#   description = "The name of the terraform cloud agent"
+#   type        = string
+#   default     = "tfagent"
+# }
+
+# variable "TFC_AGENT_TOKEN" {
+#   description = "The name of the terraform cloud agent"
+#   type        = string
+#   default     = "tfagent"
+# }
+
+
+# module "terraform-cloud-agent-kubernetes" {
+#   source  = "redeux/terraform-cloud-agent/kubernetes"
+#   version = "0.1.0"
+
+#   namespace          = "terraform-cloud-agent"
+#   create_namespace   = true
+#   agent_name         = var.TFC_AGENT_NAME
+#   agent_token        = var.TFC_AGENT_TOKEN
+#   cluster_access     = true
+# }
+
+
 locals {
   keycloak_internal_url = "${helm_release.keycloak.name}.${helm_release.keycloak.namespace}.svc.cluster.local"
   postgresql_internal_url = "${helm_release.postgresql.name}-postgresql-ha-pgpool.${helm_release.postgresql.namespace}.svc.cluster.local"
@@ -45,6 +70,61 @@ resource "kubernetes_secret" "apicurio_keycloak_secret" {
 
   depends_on = [ data.kubernetes_secret.keycloak_secret, helm_release.apicurio ]
 }
+
+resource "kubernetes_job" "create_db" {
+  depends_on = [helm_release.postgresql]
+
+  metadata {
+    name = "create-apicurio-database"
+  }
+
+  spec {
+    ttl_seconds_after_finished = 10
+    template {
+      metadata {
+        name = "create-myappdb"
+      }
+
+      spec {
+        container {
+          image = "bitnami/postgresql:latest"
+          name  = "create-db"
+
+          command = ["/bin/sh", "-c", "PGPASSWORD=$POSTGRES_PASSWORD psql -h $DB_HOST -U $POSTGRES_USER -d $POSTGRES_DB -c \"CREATE DATABASE $DB_NAME;\""]
+          env {
+            name  = "DB_HOST"
+            value = "postgresql-postgresql-ha-pgpool.postgresql.svc.cluster.local"
+          }
+
+          env {
+            name  = "POSTGRES_USER"
+            value = "postgres"
+          }
+
+          env {
+            name  = "POSTGRES_PASSWORD"
+            value = "Bveq9D8rYY"
+          }
+
+          env {
+            name  = "POSTGRES_DB"
+            value = "postgres"
+          }
+
+          env {
+            name = "DB_NAME"
+            value = "apicurio"
+          }
+        }
+
+        restart_policy = "Never"
+      }
+    }
+
+    backoff_limit = 4
+  }
+}
+
 
 resource "helm_release" "redis-cluster" {
   name       = "redis-cluster"
@@ -184,6 +264,7 @@ resource "helm_release" "apicurio" {
     value = "postgres"
   }
   
+  depends_on = [ kubernetes_job.create_db ]
 }
 
 
