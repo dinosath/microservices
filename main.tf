@@ -1,3 +1,40 @@
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.11.0"
+    }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.12.1"
+    }
+    kustomization = {
+      source = "kbst/kustomization"
+      version = "0.9.2"
+    }
+
+
+  }
+}
+
+provider "kubernetes" {
+  config_path    = "~/.kube/config"
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
+}
+
+provider "kustomization" {
+    kubeconfig_path = "~/.kube/config"
+}
+
 # variable "TFC_AGENT_NAME" {
 #   description = "The name of the terraform cloud agent"
 #   type        = string
@@ -25,28 +62,37 @@
 
 locals {
   keycloak_internal_url = "${helm_release.keycloak.name}.${helm_release.keycloak.namespace}.svc.cluster.local"
-  postgresql_internal_url = "${helm_release.postgresql.name}-postgresql-ha-pgpool.${helm_release.postgresql.namespace}.svc.cluster.local"
+  postgresql_internal_url = "${helm_release.postgres.name}-postgresql-ha-pgpool.${helm_release.postgres.namespace}.svc.cluster.local"
 }
 
 
 # Helm chart for postgres
 # https://artifacthub.io/packages/helm/bitnami/postgresql
 # https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-resource "helm_release" "postgresql" {
-  name       = "postgresql"
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "postgresql-ha"
-  namespace = "postgresql"
+resource "helm_release" "pgadmin4" {
+  name       = "pgadmin"
+  repository = "https://helm.runix.net"
+  chart      = "pgadmin4"
+  namespace = "pgadmin"
   create_namespace = true
 }
 
+resource "helm_release" "postgres" {
+  name       = "postgres"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "postgresql-ha"
+  namespace = "postgres"
+  create_namespace = true
+}
+
+
 data "kubernetes_secret" "postgresql_secret" {
   metadata {
-    name      = "${helm_release.postgresql.metadata[0].name}-postgresql-ha-postgresql"
-    namespace = helm_release.postgresql.metadata[0].namespace
+    name      = "${helm_release.postgres.metadata[0].name}-postgresql-ha-postgresql"
+    namespace = helm_release.postgres.metadata[0].namespace
   }
 
-  depends_on = [ helm_release.postgresql ]
+  depends_on = [ helm_release.postgres ]
 }
 
 data "kubernetes_secret" "keycloak_secret" {
@@ -72,30 +118,30 @@ resource "kubernetes_secret" "apicurio_keycloak_secret" {
 }
 
 resource "kubernetes_job" "create_db" {
-  depends_on = [helm_release.postgresql]
+  depends_on = [helm_release.postgres]
 
   metadata {
-    name = "create-apicurio-database"
+    name = "create-apicurio-db"
+    namespace = helm_release.postgres.namespace
   }
 
   spec {
     ttl_seconds_after_finished = 10
     template {
       metadata {
-        name = "create-myappdb"
+        name = "create-apicurio-db"
       }
-
       spec {
         container {
           image = "bitnami/postgresql:latest"
           name  = "create-db"
-
-          command = ["/bin/sh", "-c", "PGPASSWORD=$POSTGRES_PASSWORD psql -h $DB_HOST -U $POSTGRES_USER -d $POSTGRES_DB -c \"CREATE DATABASE $DB_NAME;\""]
+          command = ["/bin/sh", "-c","PGPASSWORD=$POSTGRES_PASSWORD psql -h $DB_HOST -U $POSTGRES_USER -d $POSTGRES_DB -tc \"SELECT 1 FROM pg_database WHERE datname = '$DB_NAME'\" | grep -q 1 || psql -h $DB_HOST -U $POSTGRES_USER -d $POSTGRES_DB -c \"CREATE DATABASE '$DB_NAME'\""
+          ]
+          
           env {
             name  = "DB_HOST"
-            value = "postgresql-postgresql-ha-pgpool.postgresql.svc.cluster.local"
+            value = "${helm_release.postgres.name}-postgresql-ha-pgpool.${helm_release.postgres.namespace}.svc.cluster.local"
           }
-
           env {
             name  = "POSTGRES_USER"
             value = "postgres"
@@ -103,7 +149,12 @@ resource "kubernetes_job" "create_db" {
 
           env {
             name  = "POSTGRES_PASSWORD"
-            value = "Bveq9D8rYY"
+            value_from {
+              secret_key_ref {
+                name = "${helm_release.postgres.name}-postgresql-ha-postgresql"
+                key = "password"
+              }
+            }
           }
 
           env {
@@ -163,6 +214,7 @@ resource "helm_release" "keycloak" {
    repository       = "https://charts.bitnami.com/bitnami"
    chart            = "keycloak"
    namespace        = "keycloak"
+   version = "19.3.3"
    create_namespace = true
 
   set {
@@ -174,39 +226,39 @@ resource "helm_release" "keycloak" {
     value = "true"
   }	
 
-  set {
-    name  = "rbac.create"
-    value = "true"
-  }	
-  set {
-    name  = "serviceAccount.name"
-    value = "keycloak-service-account"
-  }
+  # set {
+  #   name  = "rbac.create"
+  #   value = "true"
+  # }	
+  # set {
+  #   name  = "serviceAccount.name"
+  #   value = "keycloak-service-account"
+  # }
 
-  set {
-    name  = "rbac.rules[0].apiGroups[0]"
-    value = ""
-  }
+  # set {
+  #   name  = "rbac.rules[0].apiGroups[0]"
+  #   value = ""
+  # }
 
-  set {
-    name  = "rbac.rules[0].resources[0]"
-    value = "secrets"
-  }
+  # set {
+  #   name  = "rbac.rules[0].resources[0]"
+  #   value = "secrets"
+  # }
 
-  set {
-    name  = "rbac.rules[0].verbs[0]"
-    value = "get"
-  }
+  # set {
+  #   name  = "rbac.rules[0].verbs[0]"
+  #   value = "get"
+  # }
 
-  set {
-    name  = "rbac.rules[0].verbs[1]"
-    value = "watch"
-  }
+  # set {
+  #   name  = "rbac.rules[0].verbs[1]"
+  #   value = "watch"
+  # }
 
-  set {
-    name  = "rbac.rules[0].verbs[2]"
-    value = "list"
-  }
+  # set {
+  #   name  = "rbac.rules[0].verbs[2]"
+  #   value = "list"
+  # }
 
   # set {
   #   name  = "postgresql.enabled"
@@ -235,7 +287,7 @@ resource "helm_release" "keycloak" {
 resource "helm_release" "apicurio" {
   name       = "apicurio"
   namespace  = "apicurio"
-  chart      = "../charts/apicurio"
+  chart      = "./charts/apicurio"
   create_namespace = true
 
   set {

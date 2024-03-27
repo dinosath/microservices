@@ -1,0 +1,14 @@
+{
+	"name": "Terraform-Helm-DevContainer",
+	"dockerFile": "Dockerfile",
+	"extensions": ["ms-azuretools.vscode-docker", "hashicorp.terraform", "davidB.helm"],
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+		"source=/usr/bin/docker,target=/usr/bin/docker,type=bind"
+	],
+	"runArgs": ["--privileged"],
+	"remoteUser": "vscode"
+}
