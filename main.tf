@@ -16,8 +16,6 @@ terraform {
       source = "kbst/kustomization"
       version = "0.9.2"
     }
-
-
   }
 }
 
@@ -30,35 +28,6 @@ provider "helm" {
     config_path = "~/.kube/config"
   }
 }
-
-provider "kustomization" {
-    kubeconfig_path = "~/.kube/config"
-}
-
-# variable "TFC_AGENT_NAME" {
-#   description = "The name of the terraform cloud agent"
-#   type        = string
-#   default     = "tfagent"
-# }
-
-# variable "TFC_AGENT_TOKEN" {
-#   description = "The name of the terraform cloud agent"
-#   type        = string
-#   default     = "tfagent"
-# }
-
-
-# module "terraform-cloud-agent-kubernetes" {
-#   source  = "redeux/terraform-cloud-agent/kubernetes"
-#   version = "0.1.0"
-
-#   namespace          = "terraform-cloud-agent"
-#   create_namespace   = true
-#   agent_name         = var.TFC_AGENT_NAME
-#   agent_token        = var.TFC_AGENT_TOKEN
-#   cluster_access     = true
-# }
-
 
 locals {
   keycloak_internal_url = "${helm_release.keycloak.name}.${helm_release.keycloak.namespace}.svc.cluster.local"
@@ -85,13 +54,18 @@ resource "helm_release" "postgres" {
   create_namespace = true
 }
 
+resource "kubernetes_namespace" "apicurio" {
+  metadata {
+    name = "apicurio"
+  }
+  
+}
 
-data "kubernetes_secret" "postgresql_secret" {
+data "kubernetes_secret" "postgres" {
   metadata {
     name      = "${helm_release.postgres.metadata[0].name}-postgresql-ha-postgresql"
     namespace = helm_release.postgres.metadata[0].namespace
   }
-
   depends_on = [ helm_release.postgres ]
 }
 
@@ -100,21 +74,17 @@ data "kubernetes_secret" "keycloak_secret" {
     name      = helm_release.keycloak.metadata[0].name
     namespace = helm_release.keycloak.metadata[0].namespace
   }
-
   depends_on = [helm_release.keycloak]
 }
 
-resource "kubernetes_secret" "apicurio_keycloak_secret" {
+resource "kubernetes_secret" "postgres_apicurio" {
   metadata {
-    name      = data.kubernetes_secret.keycloak_secret.metadata[0].name
-    namespace = "apicurio"
+    name      = "postgres"
+    namespace = resource.kubernetes_namespace.apicurio.metadata[0].name
   }
-
-  data = data.kubernetes_secret.keycloak_secret.data
-  type = data.kubernetes_secret.keycloak_secret.type
-
-
-  depends_on = [ data.kubernetes_secret.keycloak_secret, helm_release.apicurio ]
+  data = data.kubernetes_secret.postgres.data
+  type = data.kubernetes_secret.postgres.type
+  depends_on = [ resource.kubernetes_namespace.apicurio ]
 }
 
 resource "kubernetes_job" "create_db" {
@@ -286,9 +256,8 @@ resource "helm_release" "keycloak" {
 
 resource "helm_release" "apicurio" {
   name       = "apicurio"
-  namespace  = "apicurio"
+  namespace  = resource.kubernetes_namespace.apicurio.metadata[0].name
   chart      = "./charts/apicurio"
-  create_namespace = true
 
   set {
     name  = "auth.secret.adminUsername"
@@ -316,7 +285,7 @@ resource "helm_release" "apicurio" {
     value = "postgres"
   }
   
-  depends_on = [ kubernetes_job.create_db ]
+  depends_on = [ kubernetes_job.create_db, resource.kubernetes_secret.postgres_apicurio ]
 }
 
 
