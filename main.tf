@@ -273,15 +273,21 @@ resource "helm_release" "apicurio" {
   }
 
   set {
+    name  = "externalDatabase.existingSecret"
+    value = "postgres"
+  }
+
+  set {
+    name  = "externalDatabase.existingSecretPasswordKey"
+    value = "password"
+  }  
+
+  set {
     name  = "externalDatabase.host"
-    value = "postgresql-postgresql-ha-pgpool.postgresql.svc.cluster.local"
+    value = "${helm_release.postgres.metadata[0].name}-postgresql-ha-pgpool.${helm_release.postgres.namespace}.svc.cluster.local"
   }
   set {
-    name  = "externalDatabase.secret.password"
-    value = "Bveq9D8rYY"
-  }
-  set {
-    name  = "externalDatabase.secret.username"
+    name  = "externalDatabase.username"
     value = "postgres"
   }
   
@@ -304,6 +310,14 @@ resource "helm_release" "apicurio" {
 
  }
 
+ resource "helm_release" "dragonfly" {
+   name             = "dragonfly"
+   repository       = "oci://ghcr.io/dragonflydb/dragonfly/helm/dragonfly"
+   chart            = "dragonfly"
+   namespace        = "dragonfly"
+   create_namespace = true
+   version          = "v1.15.1"
+ }
 
  resource "helm_release" "redpanda" {
    name             = "redpanda"

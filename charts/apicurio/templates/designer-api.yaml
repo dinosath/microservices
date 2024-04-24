@@ -27,6 +27,18 @@ spec:
         envFrom:
           - configMapRef:
               name: designer-api-config
+        env:
+          {{- if and .Values.externalDatabase.existingSecret .Values.externalDatabase.existingSecretPasswordKey }}
+          - name: DESIGNER_STORAGE_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.externalDatabase.existingSecret }}
+                key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
+          {{- else }}
+          - name: DESIGNER_STORAGE_DATASOURCE_PASSWORD
+            value: "{{ .Values.externalDatabase.password }}"
+          {{- end }}
+
         livenessProbe:
           httpGet:
             path: /apis/designer/v0/system/info

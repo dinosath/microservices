@@ -4,15 +4,14 @@ metadata:
   name: registry-config
   namespace: {{ .Values.namespace }}
 data:
-  LOG_LEVEL: "DEBUG"
-  REGISTRY_LOG_LEVEL: "DEBUG"
+  LOG_LEVEL: "INFO"
+  REGISTRY_LOG_LEVEL: "INFO"
   ENABLE_ACCESS_LOG: "true"
   QUARKUS_PROFILE: "prod"
   CORS_ALLOWED_ORIGINS: "*"
-  AUTH_ENABLED: "true"
+  AUTH_ENABLED: "false"
   KEYCLOAK_URL: "http://{{ .Values.auth.url }}"
   KEYCLOAK_REALM: "apicurio"
   KEYCLOAK_API_CLIENT_ID: "registry-api"
   REGISTRY_DATASOURCE_URL: "jdbc:postgresql://{{ .Values.externalDatabase.host }}:{{ .Values.externalDatabase.port }}/{{ .Values.externalDatabase.database }}"
-  REGISTRY_DATASOURCE_USERNAME: "{{ .Values.externalDatabase.secret.username }}"
-  REGISTRY_DATASOURCE_PASSWORD: "{{ .Values.externalDatabase.secret.password }}"
+  REGISTRY_DATASOURCE_USERNAME: "{{ .Values.externalDatabase.username }}"

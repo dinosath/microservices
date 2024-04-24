@@ -18,7 +18,7 @@ spec:
         component: apicurio-registry-api
     spec:
       containers:
-      - image: quay.io/apicurio/apicurio-registry-sql:2.5.8.Final
+      - image: quay.io/apicurio/apicurio-registry-sql:2.5.10.Final
         name: apicurio-registry-api
         ports:
           - name: web
@@ -27,6 +27,18 @@ spec:
         envFrom:
           - configMapRef:
               name: registry-config
+        {{- if and .Values.externalDatabase.existingSecret .Values.externalDatabase.existingSecretPasswordKey }}
+        env:
+          - name: REGISTRY_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.externalDatabase.existingSecret }}
+                key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
+          {{- else }}
+          - name: REGISTRY_DATASOURCE_PASSWORD
+            value: "{{ .Values.externalDatabase.password }}"
+          {{- end }}
+
         resources:
 {{ toYaml .Values.registry.api.resources | indent 10 }}
         livenessProbe:

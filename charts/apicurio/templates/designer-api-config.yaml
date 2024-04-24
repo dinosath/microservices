@@ -15,4 +15,3 @@ data:
   OIDC_API_CLIENT_ID: "designer-api"
   DESIGNER_STORAGE_DATASOURCE_URL: "jdbc:postgresql://{{ .Values.externalDatabase.host }}:{{ .Values.externalDatabase.port }}/{{ .Values.externalDatabase.database }}"
   DESIGNER_STORAGE_DATASOURCE_USERNAME: "{{ .Values.externalDatabase.username }}"
-  DESIGNER_STORAGE_DATASOURCE_PASSWORD: "{{ .Values.externalDatabase.password }}"
